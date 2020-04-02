@@ -207,7 +207,13 @@ var websiteSchema = new Schema({
                 ]
             }
         ]
-    }
+    },
+    embedded_sections:[
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'sections'
+        }
+    ]
 });
 websiteSchema
     .index({ website_name: 1 })
@@ -238,7 +244,7 @@ websiteSchema.statics.storeWebsite = async function(data){
 
 websiteSchema.statics.updateWebsite = async function(data, id){
     try {
-        return this.findOneAndUpdate({'_id': id}, data, {upsert:true});
+        return this.findOneAndUpdate({'_id': id}, data, {upsert:false});
     } catch (error) {
         throw Error(error)
     }

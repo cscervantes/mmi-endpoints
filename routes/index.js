@@ -13,6 +13,8 @@ router.get('/', function(req, res, next) {
 });
 
 require('./web')('/web', guard, router)
-require('./crawl')('/crawl', guard, router)
+require('./article')('/article', guard, router)
+require('./section')('/section', guard, router)
+require('./crawl')('/crawl', router)
 
 module.exports = router;

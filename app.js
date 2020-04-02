@@ -9,7 +9,13 @@ var indexRouter = require('./routes/index');
 var app = express();
 
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/mmi_scraper_2020', {useNewUrlParser: true, autoIndex: true});
+mongoose.connect('mongodb://localhost:27017/mmi_scraper_2020', {
+  useNewUrlParser: true, 
+  autoIndex: true,
+  useCreateIndex: true,
+  useUnifiedTopology: true
+});
+
 mongoose.connection.on('open', function(){
   console.log('Connected')
 })

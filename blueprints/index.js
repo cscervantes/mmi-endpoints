@@ -1,3 +1,5 @@
 module.exports = {
-    'websites': require('./websiteBp')
+    'websites': require('./websiteBp'),
+    'articles': require('./articleBp'),
+    'sections': require('./sectionBp')
 }
