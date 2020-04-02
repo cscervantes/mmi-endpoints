@@ -15,6 +15,8 @@ router.get('/', function(req, res, next) {
 require('./web')('/web', guard, router)
 require('./article')('/article', guard, router)
 require('./section')('/section', guard, router)
+require('./users')('/users', guard, router)
 require('./crawl')('/crawl', router)
+
 
 module.exports = router;

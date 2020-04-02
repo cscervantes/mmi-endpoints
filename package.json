@@ -15,7 +15,7 @@
     "mongoose": "^5.9.7",
     "mongoose-datatables": "^3.2.0",
     "morgan": "~1.9.1",
-    "mysql": "^2.17.1",
+    "mysql": "^2.18.1",
     "pug": "^2.0.4"
   }
 }
