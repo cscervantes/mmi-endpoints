@@ -54,4 +54,46 @@ web.LIST = async (req, res, next) => {
         next(createError(error))
     }
 }
+
+web.DATATABLES = async (req, res, next) => {
+    try {
+        console.log(req.body)
+        // let sortCol = req.body.order[0]['column']
+        let sortCol = req.body['order[0][column]']
+        // let sortDir = req.body.order[0]['dir']
+        let sortDir = req.body['order[0][dir]']
+        
+        let sort = {}
+        let fields = ['website_name', 'fqdn', 'website_category', 'website_type', 'country_code', 'status', 'date_created']
+
+        if(sortDir === 'desc'){
+            sort[fields[sortCol]] = -1
+        }else{
+            sort[fields[sortCol]] = 1
+        }
+
+        let totalDoc = await websites.countDocuments()
+
+        websites.dataTables({
+            limit: req.body.length || 10,
+            skip: req.body.start || 0,
+            search: {
+                // value: req.body.search.value || null,
+                value: req.body["search[value]"] || null,
+                fields: fields.splice(0,5)
+            },
+            sort: sort
+        }).then(function(table){
+            table['recordsTotal'] = totalDoc
+            table['recordsFiltered'] = table.total
+            res.status(200).send(table)
+        }).catch(function(error){
+            // console.log(error)
+            next(createError(error))
+        })
+    } catch (error) {
+        // console.log(error)
+        next(createError(error))
+    }
+}
 module.exports = web

@@ -1,7 +1,13 @@
 const { webCtl } = require('../controllers')
 
 module.exports = async (name, auth, router) => {
-    // router.get(name, auth, await webCtl.HOME)
+    
+    // CUSTOM API
+
+    router.post(name+'/datatables', auth, await webCtl.DATATABLES)
+
+    // CRUD
+
     router.get(name, auth, await webCtl.LIST)
 
     router.get(name+'/:id', auth, await webCtl.FIND_BY_ID)

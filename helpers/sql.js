@@ -4,7 +4,9 @@ const creds = require('./setting')
 const SQL = async (sql) => {
     return new Promise((resolve, reject) => {
         try{
-            const mysqlConn = mysql.createConnection(creds.mysql)
+            const mysqlCred = (process.env.PRODUCTION) ? creds.mysql : creds.mysql2
+            // console.log(mysqlCred)
+            const mysqlConn = mysql.createConnection(mysqlCred)
             mysqlConn.connect()
             mysqlConn.query(sql, (error, result)=>{
                 mysqlConn.end()

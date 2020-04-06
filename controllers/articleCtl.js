@@ -54,4 +54,12 @@ article.LIST = async (req, res, next) => {
         next(createError(error))
     }
 }
+
+article.DATATABLE = async (req, res, next) => {
+    try {
+        
+    } catch (error) {
+        next(createError(error))
+    }
+}
 module.exports = article
