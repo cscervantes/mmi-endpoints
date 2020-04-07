@@ -61,8 +61,14 @@ var websiteSchema = new Schema({
         default: 'LOCAL_NEWS'
     },
     alexa_rankings: {
-        type: Object,
-        default: null
+        global: {
+            type: Number,
+            default: 0
+        },
+        local: {
+            type: Number,
+            default: 0
+        },
     },
     status: {
         type: String,
