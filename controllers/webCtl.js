@@ -57,7 +57,7 @@ web.LIST = async (req, res, next) => {
 
 web.DATATABLES = async (req, res, next) => {
     try {
-        console.log(req.body)
+        // console.log(req.body)
         // let sortCol = req.body.order[0]['column']
         let sortCol = req.body['order[0][column]']
         // let sortDir = req.body.order[0]['dir']
