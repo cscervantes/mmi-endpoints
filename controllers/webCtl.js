@@ -64,7 +64,7 @@ web.DATATABLES = async (req, res, next) => {
         let sortDir = req.body['order[0][dir]']
         
         let sort = {}
-        let fields = ['website_name', 'fqdn', 'website_category', 'website_type', 'country_code', 'status', 'date_created']
+        let fields = ['website_name', 'fqdn', 'website_category', 'website_type', 'country', 'status', 'date_created']
 
         if(sortDir === 'desc'){
             sort[fields[sortCol]] = -1
