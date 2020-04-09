@@ -16,7 +16,6 @@ crawl.FECTH_SECTION_TO_CRAWL = async ( req, res, next ) => {
 crawl.FIND_WEBSITE = async (req, res, next) => {
     try {
         let q = req.query
-        console.log(q)
         let w = await websites.find({
             $or: [
                 {'website_name': new RegExp(q.fqdn, 'gi')},
