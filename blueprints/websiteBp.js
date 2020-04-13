@@ -13,6 +13,10 @@ var websiteSchema = new Schema({
             .map(v=>v.charAt(0).toUpperCase() + v.slice(1) ).join(' ')
         }
     },
+    website_icon_url: {
+        type:String,
+        default:null
+    },
     website_url: {
         required: true,
         type: String,
@@ -110,7 +114,7 @@ var websiteSchema = new Schema({
         default: Date.now()
     },
     programming_language: {
-        type: String, // this should be array but it is hard to adjust
+        type: String, // this should be enum type but it is hard to adjust
         default: null // this should be setup manual by person
     },
     request_source: {
@@ -118,6 +122,14 @@ var websiteSchema = new Schema({
         default: 'request'
     },
     is_dynamic_website:{ // this will be use later
+        type: Boolean,
+        default: false
+    },
+    is_using_selectors:{ // this will be use later
+        type: Boolean,
+        default: false
+    },
+    is_using_snippets:{ // this will be use later
         type: Boolean,
         default: false
     },
