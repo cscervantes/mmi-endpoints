@@ -67,6 +67,14 @@ var schema = new Schema({
         type: Date,
         default: Date.now()
     },
+    created_by: {
+        type:String,
+        default:'System'
+    },
+    updated_by: {
+        type:String,
+        default:'System'
+    },
     website: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'websites'

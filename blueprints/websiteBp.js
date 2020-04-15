@@ -226,6 +226,18 @@ var websiteSchema = new Schema({
             }
         ]
     },
+    code_snippet: {
+        type:String,
+        default:null
+    },
+    created_by: {
+        type:String,
+        default:'System'
+    },
+    updated_by: {
+        type:String,
+        default:'System'
+    },
     embedded_sections:[
         {
             type: mongoose.Schema.Types.ObjectId,
