@@ -36,12 +36,18 @@ var schema = new Schema({
         default: 'Web'
     },
     article_ad_value: {
-        type: mongoose.Types.Decimal128,
-        default: 0.00
+        type: Number,
+        default: '0.00',
+        set: function(t){
+            return parseFloat(t).toFixed(2)
+        }
     },
     article_pr_value: {
-        type: mongoose.Types.Decimal128,
-        default: 0.00
+        type: Number,
+        default: '0.00',
+        set: function(t){
+            return parseFloat(t).toFixed(2)
+        }
     },
     article_language: {
         type:String,

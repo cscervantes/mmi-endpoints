@@ -57,6 +57,23 @@ crawl.WEBSITE_DELETE = async (req, res, next) => { // this might be used in the 
     }
 }
 
+crawl.COUNT_WEBSITE = async (req, res, next) => {
+    try {
+        let q = req.query
+        let result = await websites.countDocuments({
+            $or: [
+                {'website_name': q.website_name },
+                {'website_url': q.website_url },
+                {'fqdn': q.fqdn },
+                {'main_sections': q.section }
+            ]
+        })
+        res.status(200).send({'data': result})
+    } catch (error) {
+        next(createError(error))
+    }
+}
+
 crawl.SECTION_STORE = async (req, res, next) => {
     try {
         let result = await websites.storeSection(req.body)
