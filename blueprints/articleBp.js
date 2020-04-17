@@ -81,6 +81,10 @@ var schema = new Schema({
         type:String,
         default:'System'
     },
+    is_in_mysql: {
+        type: Boolean,
+        default: false
+    },
     website: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'websites'
