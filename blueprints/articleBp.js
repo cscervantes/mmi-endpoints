@@ -8,6 +8,10 @@ var schema = new Schema({
         required:true,
         trim: true
     },
+    article_source_url: {
+        type: String,
+        default: null
+    },
     article_author: {
         type:String,
         trim: true
@@ -97,6 +101,7 @@ var schema = new Schema({
 
 schema
     .index({article_url: 1})
+    .index({article_source_url: 1})
     .index({article_publish_date: -1})
     .index({article_status: 1})
     .index({article_url: 1, article_publish_date: -1, article_status: 1}, {unique: true})

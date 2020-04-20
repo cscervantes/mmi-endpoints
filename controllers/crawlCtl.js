@@ -65,8 +65,20 @@ crawl.COUNT_WEBSITE = async (req, res, next) => {
                 {'website_name': q.website_name },
                 {'website_url': q.website_url },
                 {'fqdn': q.fqdn },
-                {'main_sections': q.section }
+                {'main_sections': new RegExp(q.section, 'gi') }
             ]
+        })
+        res.status(200).send({'data': result})
+    } catch (error) {
+        next(createError(error))
+    }
+}
+
+crawl.FIND_SECTION = async (req, res, next) => {
+    try {
+        let q = req.query
+        let result = await sections.find({
+            "section_url" : q.section_url
         })
         res.status(200).send({'data': result})
     } catch (error) {
@@ -101,6 +113,18 @@ crawl.SECTION_DELETE = async (req, res, next) => { // this might be used in the 
     }
 }
 
+crawl.COUNT_SECTION = async (req, res, next) => {
+    try {
+        let q = req.query
+        let result = await sections.countDocuments({
+            "section_url" : q.section_url
+        })
+        res.status(200).send({'data': result})
+    } catch (error) {
+        next(createError(error))
+    }
+}
+
 crawl.ARTICLE_STORE = async (req, res, next) => {
     try {
         let result = await articles.storeArticle(req.body)
@@ -122,6 +146,18 @@ crawl.ARTICLE_UPDATE = async (req, res, next) => {
 crawl.ARTICLE_DELETE = async (req, res, next) => { // this might be used in the future
     try {
         let result = await articles.deleteArticle(req.params.id)
+        res.status(200).send({'data': result})
+    } catch (error) {
+        next(createError(error))
+    }
+}
+
+crawl.COUNT_ARTICLE = async (req, res, next) => {
+    try {
+        let q = req.query
+        let result = await articles.countDocuments({
+            "article_url" : q.article_url, "article_status": q.article_status
+        })
         res.status(200).send({'data': result})
     } catch (error) {
         next(createError(error))
