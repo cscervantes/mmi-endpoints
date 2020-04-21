@@ -14,11 +14,13 @@ var schema = new Schema({
     },
     article_author: {
         type:String,
-        trim: true
+        trim: true,
+        default: null
     },
     article_section: {
         type:String,
-        trim: true
+        trim: true,
+        default: null
     },
     article_publish_date: {
         type:Date,
@@ -26,13 +28,16 @@ var schema = new Schema({
     },
     article_content: {
         type: String,
-        trim: true
+        trim: true,
+        default: null
     },
     article_images: {
-        type: Array
+        type: Array,
+        default: []
     },
     article_videos: {
-        type: Array
+        type: Array,
+        default: []
     },
     article_media_type: {
         type: String,
@@ -55,7 +60,8 @@ var schema = new Schema({
     },
     article_language: {
         type:String,
-        trim: true
+        trim: true,
+        default:null
     },
     article_status: {
         type: String,
@@ -63,7 +69,8 @@ var schema = new Schema({
         default: 'Queued'
     },
     article_error_status: {
-        type: String
+        type: String,
+        default: null
     },
     machine: {
         type: Number,
