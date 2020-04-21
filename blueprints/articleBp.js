@@ -12,15 +12,13 @@ var schema = new Schema({
         type: String,
         default: null
     },
-    article_author: {
-        type:String,
-        trim: true,
-        default: null
+    article_authors: {
+        type:Array,
+        default: []
     },
-    article_section: {
-        type:String,
-        trim: true,
-        default: null
+    article_sections: {
+        type:Array,
+        default: []
     },
     article_publish_date: {
         type:Date,
