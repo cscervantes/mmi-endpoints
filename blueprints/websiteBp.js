@@ -136,91 +136,175 @@ var websiteSchema = new Schema({
     selectors:{
         title: [
             {
-                selector: String,
-                attrib: String,
-                ignore: Array,
+                selector: {
+                    type:String,
+                    default:null
+                },
+                attribute: {
+                    type:String,
+                    default:null
+                },
+                ignore_tags: Array,
                 replace: [
                     {
-                        find: String,
-                        replace: String
+                        find: {
+                            type:String,
+                            default:null
+                        },
+                        replace: {
+                            type:String,
+                            default:null
+                        }
                     }
                 ]
             }
         ],
         publish: [
             {
-                selector: String,
-                attrib: String,
-                ignore: Array,
+                selector: {
+                    type:String,
+                    default:null
+                },
+                attribute: {
+                    type:String,
+                    default:null
+                },
+                ignore_tags: Array,
                 replace: [
                     {
-                        find: String,
-                        replace: String
+                        find: {
+                            type:String,
+                            default:null
+                        },
+                        replace: {
+                            type:String,
+                            default:null
+                        }
                     }
                 ]
             }
         ],
         author: [
             {
-                selector: String,
-                attrib: String,
-                ignore: Array,
+                selector: {
+                    type:String,
+                    default:null
+                },
+                attribute: {
+                    type:String,
+                    default:null
+                },
+                ignore_tags: Array,
                 replace: [
                     {
-                        find: String,
-                        replace: String
+                        find: {
+                            type:String,
+                            default:null
+                        },
+                        replace: {
+                            type:String,
+                            default:null
+                        }
                     }
                 ]
             }
         ],
         section: [
             {
-                selector: String,
-                attrib: String,
-                ignore: Array,
+                selector: {
+                    type:String,
+                    default:null
+                },
+                attribute: {
+                    type:String,
+                    default:null
+                },
+                ignore_tags: Array,
                 replace: [
                     {
-                        find: String,
-                        replace: String
+                        find: {
+                            type:String,
+                            default:null
+                        },
+                        replace: {
+                            type:String,
+                            default:null
+                        }
                     }
                 ]
             }
         ],
         image: [
             {
-                selector: String,
-                attrib: String,
-                ignore: Array,
+                selector: {
+                    type:String,
+                    default:null
+                },
+                attribute: {
+                    type:String,
+                    default:null
+                },
+                ignore_tags: Array,
                 replace: [
                     {
-                        find: String,
-                        replace: String
+                        find: {
+                            type:String,
+                            default:null
+                        },
+                        replace: {
+                            type:String,
+                            default:null
+                        }
                     }
                 ]
             }
         ],
         video: [
             {
-                selector: String,
-                attrib: String,
-                ignore: Array,
+                selector: {
+                    type:String,
+                    default:null
+                },
+                attribute: {
+                    type:String,
+                    default:null
+                },
+                ignore_tags: Array,
                 replace: [
                     {
-                        find: String,
-                        replace: String
+                        find: {
+                            type:String,
+                            default:null
+                        },
+                        replace: {
+                            type:String,
+                            default:null
+                        }
                     }
                 ]
             }
         ],
         body: [
             {
-                selector: String,
-                attrib: String,
-                ignore: Array,
+                selector: {
+                    type:String,
+                    default:null
+                },
+                attribute: {
+                    type:String,
+                    default:null
+                },
+                ignore_tags: Array,
                 replace: [
                     {
-                        find: String,
-                        replace: String
+                        find: {
+                            type:String,
+                            default:null
+                        },
+                        replace: {
+                            type:String,
+                            default:null
+                        }
                     }
                 ]
             }

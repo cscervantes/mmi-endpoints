@@ -3,6 +3,11 @@ var Schema = mongoose.Schema
 var dataTables = require('mongoose-datatables')
 
 var schema = new Schema({
+    article_title: {
+        type:String,
+        trim: true,
+        default: null
+    },
     article_url: {
         type:String,
         required:true,
