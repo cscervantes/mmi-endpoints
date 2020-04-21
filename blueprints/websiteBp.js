@@ -147,7 +147,7 @@ var websiteSchema = new Schema({
                 ]
             }
         ],
-        date_publish: [
+        publish: [
             {
                 selector: String,
                 attrib: String,
@@ -212,7 +212,7 @@ var websiteSchema = new Schema({
                 ]
             }
         ],
-        content: [
+        body: [
             {
                 selector: String,
                 attrib: String,
