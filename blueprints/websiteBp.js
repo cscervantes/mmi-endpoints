@@ -238,6 +238,10 @@ var websiteSchema = new Schema({
         type:String,
         default:'System'
     },
+    website_scraper_delay: {
+        type: Number,
+        default: 500 // this is milliseconds 500 = 0.5s
+    },
     embedded_sections:[
         {
             type: mongoose.Schema.Types.ObjectId,
