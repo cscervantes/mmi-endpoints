@@ -147,7 +147,7 @@ schema.statics.deleteArticle = async function(id){
 
 schema.statics.viewArticle = async function(id){
     try {
-        return this.findOne({'_id': id}).populate('website', 'website_name, website_url fqdn alexa_rankings website_cost website_category website_type country').populate('section', 'section_url')  
+        return this.findOne({'_id': id}).populate('website', 'website_name website_url fqdn alexa_rankings website_cost website_category website_type country').populate('section', 'section_url')  
     } catch (error) {
         throw Error(error)
     }
