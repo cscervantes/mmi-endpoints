@@ -93,6 +93,10 @@ var websiteSchema = new Schema({
         trim: true,
         default: null
     },
+    needs_search_params:{
+        type:Boolean,
+        default: false
+    },
     needs_https:{
         type:Boolean,
         default: false
