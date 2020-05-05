@@ -394,6 +394,7 @@ websiteSchema.statics.viewWebsite = async function(id){
 websiteSchema.statics.listWebsite = async function(filter){
 
     try {
+        filter.query.website_name = { $regex: new RegExp(filter.query.website_name, 'gi') }
         return this.find(filter.query).limit(parseInt(filter.query.limit) || 10)
     } catch (error) {
         throw Error(error)
