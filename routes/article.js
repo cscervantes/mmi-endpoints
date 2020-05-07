@@ -5,6 +5,8 @@ module.exports = async (name, auth, router) => {
     // custom API
     router.post(name+'/datatables', auth, await articleCtl.DATATABLES)
 
+    router.get(name+'/count', auth, await articleCtl.COUNT_ARTICLE)
+
     // router.get(name, auth, await webCtl.HOME)
     router.get(name, auth, await articleCtl.LIST)
 

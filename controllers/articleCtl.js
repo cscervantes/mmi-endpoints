@@ -19,6 +19,19 @@ article.FIND_BY_ID = async (req, res, next) => {
     }
 }
 
+article.COUNT_ARTICLE = async (req, res, next) => {
+    try {
+        let q = req.query
+        const result = await articles.countDocuments({
+            "article_url": q.article_url,
+            "article_status": q.article_status
+        })
+        res.status(200).send({'data': result})
+    } catch (error) {
+        next(createError(error))
+    }
+}
+
 article.STORE = async (req, res, next) => {
     try {
         const result = await articles.storeArticle(req.body)
