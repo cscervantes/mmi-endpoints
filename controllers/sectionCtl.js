@@ -1,5 +1,5 @@
 const createError = require('http-errors');
-const { sections } = require('../blueprints')
+const { sections, websites } = require('../blueprints')
 const section = {}
 
 section.HOME = async ( req, res, next ) => {
@@ -22,6 +22,13 @@ section.FIND_BY_ID = async (req, res, next) => {
 section.STORE = async (req, res, next) => {
     try {
         const result = await sections.storeSection(req.body)
+        await websites.findByIdAndUpdate(result.website, 
+            { $push :{ embedded_sections: result._id},
+                updated_by: req.body.updated_by,
+                date_updated: req.body.date_updated
+            },
+            { new: true, useFindAndModify: false}
+        )
         res.status(200).send({'data': result})
     } catch (error) {
         next(createError(error))
