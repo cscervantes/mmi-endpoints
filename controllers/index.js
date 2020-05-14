@@ -3,5 +3,6 @@ module.exports = {
     'crawlCtl': require('./crawlCtl'),
     'articleCtl': require('./articleCtl'),
     'sectionCtl': require('./sectionCtl'),
-    'userCtl': require('./userCtl')
+    'userCtl': require('./userCtl'),
+    'queueCtl': require('./queueCtl')
 }

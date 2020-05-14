@@ -24,10 +24,6 @@ var schema = new Schema({
     section_error_status: {
         type: String
     },
-    machine: {
-        type: Number,
-        default: null
-    },
     website: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'websites'
@@ -39,7 +35,6 @@ schema
     .index({date_created: -1})
     .index({date_updated: -1})
     .index({section_status: 1})
-    .index({machine: 1})
 
 schema.statics.storeSection = async function(data){
     try {
