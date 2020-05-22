@@ -62,7 +62,7 @@ schema.statics.deleteSection = async function(id){
 
 schema.statics.viewSection = async function(id){
     try {
-        return this.find({'_id': id})  
+        return this.findOne({'_id': id}).populate('website')  
     } catch (error) {
         throw Error(error)
     }

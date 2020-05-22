@@ -148,9 +148,12 @@ schema.statics.viewArticle = async function(id){
     }
 }
 
-schema.statics.listArticle = async function(filter){
+schema.statics.listArticle = async function(req){
     try {
-        return this.find(filter.query).limit(parseInt(filter.query.limit) || 10)
+        let limit = req.query.limit || 10
+        let filter = req.query || {}
+        delete filter.limit
+        return this.find(filter).populate('website').limit(parseInt(limit))
     } catch (error) {
         throw Error(error)
     }

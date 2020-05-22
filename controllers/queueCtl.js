@@ -12,7 +12,10 @@ queue.HOME = async ( req, res, next ) => {
 
 queue.LIST = async (req, res, next) => {
     try {
-        const result = await queues.find(req.query || {}).limit(parseInt(req.query.limit) || 25)
+        let limit = req.query.limit || 10
+        let filter = req.query || {}
+        delete filter.limit
+        const result = await queues.find(filter).limit(parseInt(limit))
         res.status(200).send({'data': result})
     } catch (error) {
         next(createError(error))

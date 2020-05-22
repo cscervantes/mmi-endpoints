@@ -7,7 +7,7 @@ const crawl = {}
 crawl.FECTH_SECTION_TO_CRAWL = async ( req, res, next ) => {
     try{
         // let result = await websites.find({}, {"_id": 1, "main_sections": 1 }).populate('embedded_sections', '_id section_url')
-        let result = await websites.find(req.query, {"_id": 1}).populate('embedded_sections', '_id section_url')
+        let result = await websites.find(req.query, {"_id": 1}).populate('embedded_sections', '_id section_url website')
         res.status(200).send({'data': result})
     }catch(error){
         next(createError(error))

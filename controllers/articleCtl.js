@@ -32,6 +32,15 @@ article.COUNT_ARTICLE = async (req, res, next) => {
     }
 }
 
+article.COUNT_IF_EXIST = async (req, res, next) => {
+    try {
+        const result = await articles.countDocuments(req.body)
+        res.status(200).send({'data': {...req.body, result} })
+    } catch (error) {
+        next(createError(error))
+    }
+}
+
 article.STORE = async (req, res, next) => {
     try {
         const result = await articles.storeArticle(req.body)

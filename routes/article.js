@@ -7,6 +7,8 @@ module.exports = async (name, auth, router) => {
 
     router.get(name+'/count', auth, await articleCtl.COUNT_ARTICLE)
 
+    router.post(name+'/count', auth, await articleCtl.COUNT_IF_EXIST)
+
     // router.get(name, auth, await webCtl.HOME)
     router.get(name, auth, await articleCtl.LIST)
 
