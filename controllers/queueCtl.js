@@ -22,6 +22,15 @@ queue.LIST = async (req, res, next) => {
     }
 }
 
+queue.COUNT = async (req, res, next) => {
+    try {
+        const result = await queues.countDocuments({})
+        res.status(200).send({'data': result})
+    } catch (error) {
+        next(createError(error))
+    }
+}
+
 queue.STORE = async (req, res, next) => {
     try {
         const result = await queues.storeQueue(req.body)
