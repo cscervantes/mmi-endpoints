@@ -4,23 +4,33 @@ var express = require('express');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+var { mongodb } = require('./helpers/setting')
+
 var indexRouter = require('./routes/index');
 
 var app = express();
 
+var connectionStr = `mongodb://${mongodb.user}:${mongodb.pass}@${mongodb.host},${mongodb.host2},${mongodb.host3}/${mongodb.db}?replicaSet=rs0&authSource=admin`
+
 var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/mmi_scraper_2020', {
-  useNewUrlParser: true, 
-  autoIndex: true,
-  useCreateIndex: true,
-  useUnifiedTopology: true
-});
+// mongoose.connect('mongodb://localhost:27017/mmi_scraper_2020', {
+//   useNewUrlParser: true, 
+//   autoIndex: true,
+//   useCreateIndex: true,
+//   useUnifiedTopology: true
+// });
+// console.log(mongodb)
+mongoose.connect(connectionStr, mongodb.options)
 
 mongoose.connection.on('open', function(){
   console.log('Connected')
 })
 mongoose.connection.on('disconnect', function(){
   console.log('Disconnected')
+})
+
+mongoose.connection.on('error', function (err){
+  console.log('Error',err)
 })
 
 // view engine setup
