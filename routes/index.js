@@ -18,6 +18,8 @@ require('./section')('/section', guard, router)
 require('./users')('/users', guard, router)
 require('./crawl')('/crawl', guard, router)
 require('./queue')('/queue', guard, router)
+require('./dashboard')('/dashboard', guard, router)
+require('./media')('/media', guard, router)
 
 
 module.exports = router;

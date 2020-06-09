@@ -4,5 +4,7 @@ module.exports = {
     'articleCtl': require('./articleCtl'),
     'sectionCtl': require('./sectionCtl'),
     'userCtl': require('./userCtl'),
-    'queueCtl': require('./queueCtl')
+    'queueCtl': require('./queueCtl'),
+    'dashboardCtl': require('./dashboardCtl'),
+    'mediaCtl': require('./mediaCtl')
 }
