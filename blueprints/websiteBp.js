@@ -391,11 +391,14 @@ websiteSchema.statics.viewWebsite = async function(id){
    
 }
 
-websiteSchema.statics.listWebsite = async function(filter){
+websiteSchema.statics.listWebsite = async function(req){
 
     try {
-        filter.query.website_name = { $regex: new RegExp(filter.query.website_name, 'gi') }
-        return this.find(filter.query).limit(parseInt(filter.query.limit) || 10)
+        let limit = req.query.limit || 10
+        req.query.website_name = { $regex: new RegExp(req.query.website_name, 'gi') }
+        let filter = req.query || {}
+        delete filter.limit
+        return this.find(filter).limit(parseInt(limit))
     } catch (error) {
         throw Error(error)
     }
