@@ -12,12 +12,18 @@ module.exports = {
         database: "mmi_scraper_2020"
     },
     mongodb : {
-        host: 'mongo1', // primary
-        host2: 'mongo2', // secondary
-        host3: 'mongo3', // secondary
-        user: 'mongo-admin',
-        db: 'mmi_scraper_2020',
-        pass: 'Ew5mj4B5^sie136A423n7519H',
+        production: {
+            host: 'mongo1', // primary
+            host2: 'mongo2', // secondary
+            host3: 'mongo3', // secondary
+            user: 'mongo-admin',
+            db: 'mmi_scraper_2020',
+            pass: 'Ew5mj4B5^sie136A423n7519H',
+        },
+        development: {
+            host: 'localhost:27017',
+            db: 'mmi_scraper_2020'
+        },
         options: {
             useUnifiedTopology: true,
             useNewUrlParser: true,
