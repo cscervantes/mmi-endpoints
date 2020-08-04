@@ -1,5 +1,7 @@
 const createError = require('http-errors');
 
+const moment = require('moment')
+
 const { websites, sections, articles } = require('../blueprints')
 
 const crawl = {}
@@ -10,6 +12,23 @@ crawl.FECTH_SECTION_TO_CRAWL = async ( req, res, next ) => {
         let result = await websites.find(req.query, {"_id": 1}).populate('embedded_sections', '_id section_url website')
         res.status(200).send({'data': result})
     }catch(error){
+        next(createError(error))
+    }
+}
+
+crawl.ADD_LAST_MODIFIED_TO_CRAWL = async ( req, res, next ) => {
+    try {
+        let today = new Date()
+        let yesterday = moment(today).subtract(1, 'week').format()
+        let q =  req.query
+        q.date_updated = {
+            "$lte": today,
+            "$gte": yesterday
+        }
+        q.status = "ACTIVE"
+        let result = await websites.find(q, {"_id": 1, "website_type": 1}).populate('embedded_sections', '_id section_url website')
+        res.status(200).send({'data': result})
+    } catch (error) {
         next(createError(error))
     }
 }
