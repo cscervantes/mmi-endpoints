@@ -1,8 +1,10 @@
 const { crawlCtl } = require('../controllers')
+const crawl = require('../controllers/crawlCtl')
 
 module.exports = async (name, auth, router) => {
     router.get(name, auth, await crawlCtl.FECTH_SECTION_TO_CRAWL)
     router.get(name+'/last_modified_active_websites', auth, await crawlCtl.ADD_LAST_MODIFIED_TO_CRAWL)
+    router.get(name+'/crawl_active_websites', auth, await crawl.CRAWL_ACTIVE_WEBSITES)
 
     router.get(name+'/website', auth, await crawlCtl.FIND_WEBSITE)
     router.get(name+'/website/count', auth, await crawlCtl.COUNT_WEBSITE)

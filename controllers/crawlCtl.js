@@ -33,6 +33,27 @@ crawl.ADD_LAST_MODIFIED_TO_CRAWL = async ( req, res, next ) => {
     }
 }
 
+crawl.CRAWL_ACTIVE_WEBSITES = async ( req, res, next ) => {
+    try {
+        let q = req.query
+        let fields = JSON.parse(req.query.fields)
+        let offset = parseInt(q.skip) || 0
+        let size = parseInt(q.limit) || 50
+        console.log(q, fields)
+        delete q.limit
+        delete q.skip
+        delete q.fields
+        let result = await websites.find(q, fields)
+        .populate('embedded_sections', '_id section_url website')
+        .skip(offset)
+        .limit(size)
+        res.status(200).send({'data': result})
+    } catch (error) {
+        console.log(error)
+        next(createError(error))
+    }
+}
+
 crawl.FIND_WEBSITE = async (req, res, next) => {
     try {
         let q = req.query
