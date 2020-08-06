@@ -39,7 +39,7 @@ crawl.CRAWL_ACTIVE_WEBSITES = async ( req, res, next ) => {
         let fields = JSON.parse(req.query.fields)
         let offset = parseInt(q.skip) || 0
         let size = parseInt(q.limit) || 50
-        console.log(q, fields)
+        // console.log(q, fields)
         delete q.limit
         delete q.skip
         delete q.fields
@@ -49,7 +49,7 @@ crawl.CRAWL_ACTIVE_WEBSITES = async ( req, res, next ) => {
         .limit(size)
         res.status(200).send({'data': result})
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         next(createError(error))
     }
 }
