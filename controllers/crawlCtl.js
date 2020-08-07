@@ -18,15 +18,26 @@ crawl.FECTH_SECTION_TO_CRAWL = async ( req, res, next ) => {
 
 crawl.ADD_LAST_MODIFIED_TO_CRAWL = async ( req, res, next ) => {
     try {
-        let today = new Date()
-        let yesterday = moment(today).subtract(1, 'week').format()
         let q =  req.query
+        let qDate = req.query.duration || '1week'
+        let offset = parseInt(q.skip) || 0
+        let size = parseInt(q.limit) || 50
+        let numDay = parseInt(qDate.match(/([0-9]+)/g)[0])
+        let wordDay = qDate.match(/([a-zA-Z]+)/g)[0]
+        let today = new Date()
+        let from = moment(today).subtract(numDay, wordDay).format()
         q.date_updated = {
             "$lte": today,
-            "$gte": yesterday
+            "$gte": from
         }
         q.status = "ACTIVE"
-        let result = await websites.find(q, {"_id": 1, "website_type": 1}).populate('embedded_sections', '_id section_url website')
+        delete q.limit
+        delete q.skip
+        delete q.duration
+        // let result = await websites.find(q, {"_id": 1, "website_type": 1}).populate('embedded_sections', '_id section_url website')
+        let result = await websites.find(q, {"_id": 1, "website_type": 1, "main_sections": 1})
+        .skip(offset)
+        .limit(size)
         res.status(200).send({'data': result})
     } catch (error) {
         next(createError(error))
