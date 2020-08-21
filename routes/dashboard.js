@@ -10,4 +10,8 @@ module.exports = async (name, auth, router) => {
 
     router.get(name+'/article_status', auth, await dashboardCtl.ARTICLE_STATUS)
 
+    router.post(name+'/article_metrics', auth, await dashboardCtl.ARTICLE_METRICS)
+    
+    router.get(name+'/social_media_status', auth, await dashboardCtl.SOCIAL_MEDIA_STATUS)
+
 }

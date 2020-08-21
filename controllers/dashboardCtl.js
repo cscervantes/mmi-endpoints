@@ -1,6 +1,8 @@
 const createError = require('http-errors');
 const moment = require('moment')
+const mongoose = require('mongoose')
 const { websites, articles } = require('../blueprints')
+const SQL = require('../helpers/sql')
 const dashboards = {}
 
 
@@ -196,6 +198,60 @@ dashboards.ARTICLE_STATUS = async (req, res, next) => {
             if(err) throw Error(err);
             else res.status(200).send(result)
         })
+    } catch (error) {
+        next(createError(error))
+    }
+}
+
+dashboards.ARTICLE_METRICS = async (req, res, next) => {
+    try {
+        let project = {}
+        project["$match"] = {
+            
+            article_status: {
+                $regex: new RegExp(/(\w)/, "gi")
+            },
+            website: mongoose.Types.ObjectId(req.body.website),
+            date_created: {
+                $lte: new Date(req.body.end_time),
+                $gte: new Date(req.body.start_time)
+            }
+        }
+        articles.aggregate([
+            {
+                ...project
+            },
+            {
+                $group: {   
+                    _id: "$article_status",
+                    count: { $sum: 1}
+                }
+            }
+        ], function(err, result){
+            if(err) throw Error(err);
+            else res.status(200).send(result)
+        })
+    } catch (error) {
+        next(createError(error))
+    }
+}
+
+dashboards.SOCIAL_MEDIA_STATUS = async (req, res, next) => {
+    try {
+        let to = moment(new Date()).format('Y-MM-DD')
+        let qDate = req.query.duration
+        let numDay = parseInt(qDate.match(/([0-9]+)/g)[0])
+        let wordDay = qDate.match(/([a-zA-Z]+)/g)[0]
+        let from = moment().subtract(numDay, wordDay).format('Y-MM-DD')
+        let query = {
+            sql: `
+            SELECT COUNT(*) AS count, soc_source AS _id FROM socialmedia 
+            WHERE soc_added >= "${from} 00:00:00" AND soc_added <= "${to} 23:59:59"
+            GROUP BY soc_source
+            `
+        }
+        // console.log(query)
+        res.status(200).send(await SQL(query))
     } catch (error) {
         next(createError(error))
     }
