@@ -2,7 +2,8 @@ const createError = require('http-errors');
 const moment = require('moment')
 const mongoose = require('mongoose')
 const { websites, articles } = require('../blueprints')
-const SQL = require('../helpers/sql')
+const SQL = require('../helpers/sql');
+const web = require('./webCtl');
 const dashboards = {}
 
 
@@ -246,13 +247,34 @@ dashboards.SOCIAL_MEDIA_STATUS = async (req, res, next) => {
         let query = {
             sql: `
             SELECT COUNT(*) AS count, soc_source AS _id FROM socialmedia 
-            WHERE soc_added >= "${from} 00:00:00" AND soc_added <= "${to} 23:59:59"
+            WHERE soc_created_date >= "${from} 00:00:00" AND soc_created_date <= "${to} 23:59:59"
             GROUP BY soc_source
             `
         }
         // console.log(query)
         res.status(200).send(await SQL(query))
     } catch (error) {
+        next(createError(error))
+    }
+}
+
+dashboards.ARTICLE_PER_WEBSITE = async (req, res, next) => {
+    try {
+        let filter = req.query || {}
+        if(filter.from || filter.to){
+            filter.date_created = {
+                $lte: new Date(filter.to) || new Date(),
+                $gte: new Date(filter.from) || new Date()
+            }
+        }
+        let fields = JSON.parse(req.query.fields)
+        delete filter.fields
+        delete filter.from
+        delete filter.to
+        let result = await articles.find(filter, fields)
+        res.status(200).send(result)
+    } catch (error) {
+        // console.log(error)
         next(createError(error))
     }
 }

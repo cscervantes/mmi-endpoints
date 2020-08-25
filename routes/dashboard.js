@@ -14,4 +14,6 @@ module.exports = async (name, auth, router) => {
     
     router.get(name+'/social_media_status', auth, await dashboardCtl.SOCIAL_MEDIA_STATUS)
 
+    router.get(name+'/article_per_website', await dashboardCtl.ARTICLE_PER_WEBSITE)
+
 }
