@@ -75,6 +75,10 @@ var schema = new Schema({
         type: String,
         default: null
     },
+    article_source_from: {
+        type: String,
+        default: 'NodeJS Static Scraper' // e.g(NodeJS Dynamic Scraper)
+    },
     date_created: {
         type: Date,
         default: Date.now()
@@ -114,6 +118,7 @@ schema
     .index({date_created: -1})
     .index({date_updated: -1})
     .index({article_status: 1})
+    .index({article_source_from: 1})
 
 
 schema.statics.storeArticle = async function(data){
