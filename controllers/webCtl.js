@@ -96,4 +96,21 @@ web.DATATABLES = async (req, res, next) => {
         next(createError(error))
     }
 }
+
+web.WITH_NULL_FIELDS = async(req, res, next) => {
+    try {
+        let limit = req.query.limit || 10
+        let offset = req.query.offset || 0
+        let fields = req.query.fields || {}
+        let filter = req.body || {}
+        // delete filter.limit
+        // delete filter.offset
+        // delete filter.fields
+        // console.log(filter)
+        const result = await websites.find(filter, fields).limit(parseInt(limit)).skip(offset)
+        res.status(200).send({'data': result})
+    } catch (error) {
+        next(createError(error))
+    }
+}
 module.exports = web

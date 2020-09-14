@@ -6,6 +6,8 @@ module.exports = async (name, auth, router) => {
 
     router.post(name+'/datatables', auth, await webCtl.DATATABLES)
 
+    router.post(name+'/with_null_fields', auth, await webCtl.WITH_NULL_FIELDS)
+
     // CRUD
 
     router.get(name, auth, await webCtl.LIST)
