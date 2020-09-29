@@ -118,4 +118,32 @@ article.DATATABLES = async (req, res, next) => {
         next(createError(error))
     }
 }
+
+article.CUSTOM_QUERY = async(req, res, next) => {
+    try {
+        let limit = req.query.limit || 10
+        let offset = req.query.offset || 0
+        let fields = req.query.fields || {}
+        let sort = req.query.sort || 'date_created'
+        let sortBy = req.query.sortBy || -1
+        let sorting = {}
+        sorting[sort] = parseInt(sortBy)
+        // console.log(sorting)
+        let filter = req.body || {}
+        const result = await articles.find(filter, fields).limit(parseInt(limit)).skip(parseInt(offset)).sort(sorting)
+        res.status(200).send({'data': result})
+    } catch (error) {
+        console.log(error)
+        next(createError(error))
+    }
+}
+
+article.COUNT_CUSTOM_QUERY = async (req, res, next) => {
+    try {
+        const result = await articles.countDocuments(req.body)
+        res.status(200).send({'data': result})
+    } catch (error) {
+        next(createError(error))
+    }
+}
 module.exports = article

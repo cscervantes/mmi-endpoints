@@ -9,6 +9,10 @@ module.exports = async (name, auth, router) => {
 
     router.post(name+'/count', auth, await articleCtl.COUNT_IF_EXIST)
 
+    router.post(name+'/custom_query', auth, await articleCtl.CUSTOM_QUERY)
+
+    router.post(name+'/count_custom_query', auth, await articleCtl.COUNT_CUSTOM_QUERY)
+
     // router.get(name, auth, await webCtl.HOME)
     router.get(name, auth, await articleCtl.LIST)
 

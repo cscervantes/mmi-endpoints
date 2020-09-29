@@ -8,6 +8,8 @@ module.exports = async (name, auth, router) => {
 
     router.post(name+'/with_null_fields', auth, await webCtl.WITH_NULL_FIELDS)
 
+    router.post(name+'/count_custom_query', auth, await webCtl.COUNT_CUSTOM_QUERY)
+
     // CRUD
 
     router.get(name, auth, await webCtl.LIST)
