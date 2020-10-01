@@ -20,6 +20,7 @@ require('./crawl')('/crawl', guard, router)
 require('./queue')('/queue', guard, router)
 require('./dashboard')('/dashboard', guard, router)
 require('./media')('/media', guard, router)
+require('./link')('/link', guard, router)
 
 
 module.exports = router;
