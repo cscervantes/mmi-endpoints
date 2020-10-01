@@ -38,4 +38,22 @@ link.DELETE = async (req, res, next) => {
     }
 }
 
+link.CUSTOM_QUERY = async (req, res, next) => {
+    try {
+        let limit = req.query.limit || 10
+        let offset = req.query.offset || 0
+        let fields = req.query.fields || {}
+        let sort = req.query.sort || 'date_created'
+        let sortBy = req.query.sortBy || -1
+        let sorting = {}
+        sorting[sort] = parseInt(sortBy)
+        // console.log(sorting)
+        let filter = req.body || {}
+        const result = await link.find(filter, fields).populate('website', '-embedded_sections -main_sections -sub_sections').limit(parseInt(limit)).skip(parseInt(offset)).sort(sorting)
+        res.status(200).send({'data': result})
+    } catch (error) {
+        next(createError(error))
+    }
+}
+
 module.exports = link
