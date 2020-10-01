@@ -7,5 +7,6 @@ module.exports = {
     'queueCtl': require('./queueCtl'),
     'dashboardCtl': require('./dashboardCtl'),
     'mediaCtl': require('./mediaCtl'),
-    'linkCtl': require('./linkCtl')
+    'linkCtl': require('./linkCtl'),
+    'articleTestCtl': require('./articleTestCtl')
 }
