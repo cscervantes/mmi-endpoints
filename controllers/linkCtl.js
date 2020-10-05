@@ -42,7 +42,10 @@ link.CUSTOM_QUERY = async (req, res, next) => {
     try {
         let limit = req.query.limit || 10
         let offset = req.query.offset || 0
-        let fields = req.query.fields || {}
+        let fields = {}
+        if(req.query.fields){
+            JSON.parse(req.query.fields)
+        }
         let sort = req.query.sort || 'date_created'
         let sortBy = req.query.sortBy || -1
         let sorting = {}

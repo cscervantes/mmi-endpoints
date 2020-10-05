@@ -101,7 +101,10 @@ web.WITH_NULL_FIELDS = async(req, res, next) => {
     try {
         let limit = req.query.limit || 10
         let offset = req.query.offset || 0
-        let fields = req.query.fields || {}
+        let fields = {}
+        if(req.query.fields){
+            JSON.parse(req.query.fields)
+        }
         let filter = req.body || {}
         let sort = req.query.sort || 'date_created'
         let sortBy = req.query.sortBy || -1
@@ -122,7 +125,10 @@ web.CUSTOM_QUERY = async(req, res, next) => {
     try {
         let limit = req.query.limit || 10
         let offset = req.query.offset || 0
-        let fields = req.query.fields || {}
+        let fields = {}
+        if(req.query.fields){
+            fields = JSON.parse(req.query.fields)
+        }
         let filter = req.body || {}
         let sort = req.query.sort || 'date_created'
         let sortBy = req.query.sortBy || -1
@@ -131,6 +137,7 @@ web.CUSTOM_QUERY = async(req, res, next) => {
         const result = await websites.find(filter, fields).limit(parseInt(limit)).skip(parseInt(offset)).sort(sorting)
         res.status(200).send({'data': result})
     } catch (error) {
+        console.log(error)
         next(createError(error))
     }
 }
