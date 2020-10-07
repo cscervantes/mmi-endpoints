@@ -59,4 +59,13 @@ link.CUSTOM_QUERY = async (req, res, next) => {
     }
 }
 
+link.COUNT_CUSTOM_QUERY = async (req, res, next) => {
+    try {
+        const result = await links.countDocuments(req.body)
+        res.status(200).send({'data': result})
+    } catch (error) {
+        next(createError(error))
+    }
+}
+
 module.exports = link

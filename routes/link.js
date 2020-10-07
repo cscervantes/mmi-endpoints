@@ -5,6 +5,8 @@ module.exports = async (name,  auth, router) => {
 
     router.post(name+'/custom_query', auth, await link.CUSTOM_QUERY)
     
+    router.post(name+'/count_custom_query', auth, await link.COUNT_CUSTOM_QUERY)
+    
     router.get(name+'/:id', auth, await link.ID)
     router.post(name, auth, await link.CREATE)
     router.put(name+'/:id', auth, await link.UPDATE)
