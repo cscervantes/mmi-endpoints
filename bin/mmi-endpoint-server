@@ -87,5 +87,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-  debug('Production?', Boolean(process.env.PRODUCTION) || false)
+  debug('Production?', process.env.PRODUCTION || false)
 }

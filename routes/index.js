@@ -22,6 +22,7 @@ require('./dashboard')('/dashboard', guard, router)
 require('./media')('/media', guard, router)
 require('./link')('/link', guard, router)
 require('./articleTest')('/article-test', guard, router)
+require('./globalLink')('/global-link', guard, router)
 
 
 module.exports = router;

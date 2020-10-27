@@ -8,5 +8,6 @@ module.exports = {
     'dashboardCtl': require('./dashboardCtl'),
     'mediaCtl': require('./mediaCtl'),
     'linkCtl': require('./linkCtl'),
-    'articleTestCtl': require('./articleTestCtl')
+    'articleTestCtl': require('./articleTestCtl'),
+    'globalLinkCtl': require('./globalLinkCtl')
 }

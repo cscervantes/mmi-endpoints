@@ -10,8 +10,9 @@ var indexRouter = require('./routes/index');
 
 var app = express();
 
-var connectionStr = (process.env.PRODUCTION) ? `mongodb://${mongodb.production.user}:${mongodb.production.pass}@${mongodb.production.host},${mongodb.production.host2},${mongodb.production.host3}/${mongodb.production.db}?replicaSet=rs0&authSource=admin` : `mongodb://${mongodb.development.host}/${mongodb.development.db}`
+var connectionStr = (process.env.PRODUCTION === "true") ? `mongodb://${mongodb.production.user}:${mongodb.production.pass}@${mongodb.production.host},${mongodb.production.host2},${mongodb.production.host3}/${mongodb.production.db}?replicaSet=rs0&authSource=admin` : `mongodb://${mongodb.development.host}/${mongodb.development.db}`
 
+// console.log(connectionStr)
 // var connectionStr = `mongodb://${mongodb.development.host}/${mongodb.development.db}`
 
 var mongoose = require('mongoose');

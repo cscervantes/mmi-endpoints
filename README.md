@@ -19,3 +19,9 @@ endpoints
 
 - PM2 Startup
     *  PRODUCTION=true pm2 start bin/mmi-endpoint-server --name endpoint-server -i 3(number of cluster)
+
+- Important upon creation of new collections
+    * set autoIndex=true inside "helpers/setting.js"
+     -  run `PRODUCTION=true npm run dev` on your local machine
+     -  check the new collections if it is already created and has indexes on mongodb
+     -  then set autoIndex=false before committing your changes to production
