@@ -24,6 +24,14 @@ var schema = new Schema({
         type:String,
         trim: true
     },
+    google_image: {
+        type:String,
+        trim:true
+    },
+    google_website_name: {
+        type:String,
+        trim:true
+    },
     status: {
         type: String,
         enum:['Queued', 'Processing', 'Done', 'Error'],
@@ -55,6 +63,7 @@ schema
 .index({google_tile: 1})
 .index({google_link: 1, original_url: 1}, {unique: true})
 .index({original_url: 1})
+.index({google_website_name: 1})
 .index({google_keyword: 1})
 .index({google_date: -1})
 .index({date_created: -1})
