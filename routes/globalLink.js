@@ -1,6 +1,9 @@
+const { global_links } = require('../blueprints')
 const { globalLinkCtl } = require('../controllers')
 
 module.exports = async (name,  auth, router) => {
+
+    router.post(name+'/datatables', auth, await globalLinkCtl.DATATABLES)
 
     router.post(name+'/custom_query', auth, await globalLinkCtl.CUSTOM_QUERY)
     
