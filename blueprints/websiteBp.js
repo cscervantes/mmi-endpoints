@@ -81,17 +81,18 @@ var websiteSchema = new Schema({
     },
     region: {
         type: String,
-        default: null
+        trim: true,
+        default: "Unknown"
     },
     country: {
         type: String,
         trim: true,
-        default: null
+        default: "Unknown"
     },
     country_code: {
         type: String,
         trim: true,
-        default: null
+        default: "NoC"
     },
     needs_search_params:{
         type:Boolean,
@@ -335,7 +336,15 @@ var websiteSchema = new Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'sections'
         }
-    ]
+    ],
+    is_aggregator: {
+        type: Boolean,
+        default: false
+    },
+    is_to_be_scraped: {
+        type: Boolean,
+        default: false
+    }
 });
 websiteSchema
     .index({ website_name: 1 })
@@ -353,6 +362,8 @@ websiteSchema
     .index({ programming_language: 1})
     .index({ request_source: 1})
     .index({ is_dynamic_website: 1 })
+    .index({ is_aggregator: 1 })
+    .index({ is_to_be_scraped: 1 })
     .index({"website_name": 1, "fqdn": 1}, {unique: true})
 
 websiteSchema.statics.storeWebsite = async function(data){
