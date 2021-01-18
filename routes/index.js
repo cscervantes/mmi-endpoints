@@ -23,6 +23,7 @@ require('./media')('/media', guard, router)
 require('./link')('/link', guard, router)
 require('./articleTest')('/article-test', guard, router)
 require('./globalLink')('/global-link', guard, router)
+require('./rawWebsite')('/raw-website', guard, router)
 
 
 module.exports = router;

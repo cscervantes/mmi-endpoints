@@ -9,5 +9,6 @@ module.exports = {
     'mediaCtl': require('./mediaCtl'),
     'linkCtl': require('./linkCtl'),
     'articleTestCtl': require('./articleTestCtl'),
-    'globalLinkCtl': require('./globalLinkCtl')
+    'globalLinkCtl': require('./globalLinkCtl'),
+    'rawWebsiteCtl': require('./rawWebsiteCtl')
 }
