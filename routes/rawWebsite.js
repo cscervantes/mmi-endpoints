@@ -3,8 +3,12 @@ const { rawWebsiteCtl } = require('../controllers')
 module.exports = async (name, auth, router) => {
     
     // CUSTOM API
+
+    router.post(name+'/datatables', auth, await rawWebsiteCtl.DATATABLES)
     
     router.post(name+'/count', auth, await rawWebsiteCtl.COUNT)
+
+    router.post(name+'/query', auth, await rawWebsiteCtl.QUERY)
 
     // CRUD
 
