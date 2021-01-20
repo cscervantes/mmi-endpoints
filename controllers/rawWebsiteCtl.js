@@ -89,37 +89,96 @@ raw.COUNT = async (req, res, next) => {
 
 raw.DATATABLES = async (req, res, next) => {
     try {
+
         let sortCol = req.body['order[0][column]']
+
         let sortDir = req.body['order[0][dir]']
         
         let sort = {}
-        let fields = ['name', 'fqdn', 'country', 'verified', 'alexa_rankings.global', 'alexa_rankings.local', 'date_created']
+
+        let fields = ['name', 'fqdn', 'country', 'alexa_rankings.global', 'alexa_rankings.local']
 
         if(sortDir === 'desc'){
+
             sort[fields[sortCol]] = -1
+
         }else{
+
             sort[fields[sortCol]] = 1
+
         }
+
+        let query = {}
+
+        table = {}
 
         let totalDoc = await raw_websites.countDocuments()
 
-        raw_websites.dataTables({
-            limit: req.body.length || 10,
-            skip: req.body.start || 0,
-            search: {
-                value: req.body["search[value]"] || null,
-                fields: fields.splice(0,5)
-            },
-            sort: sort
-        }).then(function(table){
-            table['recordsTotal'] = totalDoc
-            table['recordsFiltered'] = table.total
-            res.status(200).send(table)
-        }).catch(function(error){
-            next(createError(error))
-        })
+        table.recordsTotal = totalDoc
+
+        if(req.body.hasOwnProperty('fqdn')){
+
+            query.fqdn = { "$regex": req.body.fqdn }
+
+        }
+
+        if(req.body.hasOwnProperty('global')){
+
+            let k = req.body.global.split(':')[1]
+
+            let v = parseInt(req.body.global.split(':')[0])
+
+            let kv = {}
+
+            kv[k] = v
+            
+            query["alexa_rankings.global"] = kv
+
+        }
+        
+        if(req.body.hasOwnProperty('local')){
+
+            let k = req.body.local.split(':')[1]
+
+            let v = parseInt(req.body.local.split(':')[0])
+
+            let kv = {}
+
+            kv[k] = v
+
+            query["alexa_rankings.local"] = kv
+
+        }
+
+        if(req.body.hasOwnProperty('name')){
+
+            query.name = {"$regex": new RegExp(req.body.name, "i")}
+
+        }
+
+        if(req.body.hasOwnProperty('country')){
+
+            query.country = {"$regex": new RegExp(req.body.country, "i")}
+            
+        }
+        
+        let recordsFiltered = await raw_websites.countDocuments(query)
+               
+
+        table.recordsFiltered = recordsFiltered
+        
+        table.total = recordsFiltered
+        
+        const result = await raw_websites.find(query).sort(sort).skip(parseInt(req.body.start)).limit(parseInt(req.body.length))
+
+        table.data = result
+
+        res.status(200).send(table)
+
     } catch (error) {
+
         next(createError(error))
+
     }
 }
 
