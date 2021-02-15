@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const { websites } = require('../blueprints')
+const moment = require('moment')
 const web = {}
 
 web.HOME = async ( req, res, next ) => {
@@ -150,4 +151,128 @@ web.COUNT_CUSTOM_QUERY = async (req, res, next) => {
         next(createError(error))
     }
 }
+
+web.DATATABLES_2 = async (req, res, next) => {
+    try {
+
+        // console.log(req.body)
+
+        let sortCol = req.body['order[0][column]']
+
+        let sortDir = req.body['order[0][dir]']
+        
+        let sort = {}
+
+        let fields = ['website_name', 'fqdn', 'country', 'country_code', 'website_category', 'alexa_rankings.global', 'alexa_rankings.local', 'verified', 'date_created']
+
+        if(sortDir === 'desc'){
+
+            sort[fields[sortCol]] = -1
+
+        }else{
+
+            sort[fields[sortCol]] = 1
+
+        }
+
+        let query = {}
+
+        table = {}
+
+        let totalDoc = await websites.countDocuments()
+
+        table.recordsTotal = totalDoc
+
+        if(req.body.hasOwnProperty('fqdn')){
+
+            query.fqdn = { "$regex": req.body.fqdn }
+
+        }
+
+        if(req.body.hasOwnProperty('global')){
+
+            let k = req.body.global.split(':')[1]
+
+            let v = parseInt(req.body.global.split(':')[0])
+
+            let kv = {}
+
+            kv[k] = v
+            
+            query["alexa_rankings.global"] = kv
+
+        }
+        
+        if(req.body.hasOwnProperty('local')){
+
+            let k = req.body.local.split(':')[1]
+
+            let v = parseInt(req.body.local.split(':')[0])
+
+            let kv = {}
+
+            kv[k] = v
+
+            query["alexa_rankings.local"] = kv
+
+        }
+
+        if(req.body.hasOwnProperty('website_name')){
+
+            query.website_name = {"$regex": new RegExp(req.body.website_name, "i")}
+
+        }
+
+        if(req.body.hasOwnProperty('country')){
+
+            query.country = {"$regex": new RegExp(req.body.country, "i")}
+            
+        }
+
+        if(req.body.hasOwnProperty('country_code')){
+
+            query.country_code = {"$regex": new RegExp(req.body.country_code, "i")}
+
+        }
+
+        if(req.body.hasOwnProperty('website_category')){
+
+            query.website_category = {"$regex": new RegExp(req.body.website_category, "i")}
+
+        }
+
+        if(req.body.hasOwnProperty('verified')){
+
+            query.verified = JSON.parse(req.body.verified)
+
+        }
+
+        if(req.body.hasOwnProperty('date_created')){
+
+            query.date_created = {"$gte": moment(req.body.date_created).subtract(1, 'day').format('YYYY-MM-DD')+"T16:00:00.000Z", "$lte": req.body.date_created+"T16:00:00.000Z" }
+
+        }
+
+        // console.log(query)
+        
+        let recordsFiltered = await websites.countDocuments(query)
+               
+
+        table.recordsFiltered = recordsFiltered
+        
+        table.total = recordsFiltered
+        
+        const result = await websites.find(query).sort(sort).skip(parseInt(req.body.start)).limit(parseInt(req.body.length))
+
+        table.data = result
+
+        res.status(200).send(table)
+
+    } catch (error) {
+
+        next(createError(error))
+
+    }
+}
+
 module.exports = web
