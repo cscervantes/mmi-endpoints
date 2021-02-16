@@ -163,7 +163,7 @@ web.DATATABLES_2 = async (req, res, next) => {
         
         let sort = {}
 
-        let fields = ['website_name', 'fqdn', 'country', 'country_code', 'website_category', 'alexa_rankings.global', 'alexa_rankings.local', 'verified', 'date_created']
+        let fields = ['website_name', 'fqdn', 'country', 'country_code', 'website_category', 'alexa_rankings.global', 'alexa_rankings.local', 'verified', 'date_created', 'status']
 
         if(sortDir === 'desc'){
 
@@ -244,6 +244,12 @@ web.DATATABLES_2 = async (req, res, next) => {
         if(req.body.hasOwnProperty('verified')){
 
             query.verified = JSON.parse(req.body.verified)
+
+        }
+
+        if(req.body.hasOwnProperty('status')){
+
+            query.status = req.body.status
 
         }
 
