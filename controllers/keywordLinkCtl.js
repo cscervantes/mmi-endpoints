@@ -44,7 +44,7 @@ keywordLink.CUSTOM_QUERY = async (req, res, next) => {
         let offset = req.query.offset || 0
         let fields = {}
         if(req.query.fields){
-            JSON.parse(req.query.fields)
+            fields = JSON.parse(req.query.fields)
         }
         let sort = req.query.sort || 'date_created'
         let sortBy = req.query.sortBy || -1
