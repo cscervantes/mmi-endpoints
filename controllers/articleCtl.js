@@ -133,7 +133,17 @@ article.CUSTOM_QUERY = async(req, res, next) => {
         sorting[sort] = parseInt(sortBy)
         // console.log(sorting)
         let filter = req.body || {}
-        const result = await articles.find(filter, fields).populate('website', '-embedded_sections -main_sections -sub_sections').limit(parseInt(limit)).skip(parseInt(offset)).sort(sorting)
+        let website_query = {
+            path: 'website',
+            // match: {
+            //     "website_category": "News"
+            // },
+            select: '-embedded_sections -main_sections -sub_sections'
+        }
+        if(req.query.website_query){
+            website_query = JSON.parse(req.query.website_query)
+        }
+        const result = await articles.find(filter, fields).populate(website_query).limit(parseInt(limit)).skip(parseInt(offset)).sort(sorting)
         res.status(200).send({'data': result})
     } catch (error) {
         console.log(error)
