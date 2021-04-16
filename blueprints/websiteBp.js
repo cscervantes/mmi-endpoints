@@ -112,11 +112,11 @@ var websiteSchema = new Schema({
     },
     date_created: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
     date_updated: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
     programming_language: {
         type: String, // this should be enum type but it is hard to adjust

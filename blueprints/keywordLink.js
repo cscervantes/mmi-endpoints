@@ -14,7 +14,7 @@ var schema = new Schema({
     },
     google_date: {
         type: Date,
-        default: new Date()
+        default: Date.now
     },
     original_url: {
         type:String,
@@ -39,11 +39,11 @@ var schema = new Schema({
     },
     date_created: {
         type: Date,
-        default: new Date()
+        default: Date.now
     },
     date_updated: {
         type: Date,
-        default: new Date()
+        default: Date.now
     },
     created_by: {
         type:String,

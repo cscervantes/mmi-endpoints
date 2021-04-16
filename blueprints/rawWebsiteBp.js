@@ -58,11 +58,11 @@ const schema = new Schema({
     },
     date_created: {
         type:Date,
-        default: new Date()
+        default: Date.now
     },
     date_updated: {
         type:Date,
-        default: new Date()
+        default: Date.now
     }
 })
 

@@ -16,11 +16,11 @@ var schema = new Schema({
     },
     date_created: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
     date_updated: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
     created_by: {
         type:String,
