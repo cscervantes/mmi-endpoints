@@ -352,6 +352,10 @@ var websiteSchema = new Schema({
     is_using_proxy: {
         type: Boolean,
         default: false
+    },
+    is_priority: {
+        type: Boolean,
+        default: false
     }
 });
 websiteSchema
@@ -374,6 +378,7 @@ websiteSchema
     .index({ is_to_be_scraped: 1 })
     .index({ verified: 1 })
     .index({ is_using_proxy: 1 })
+    .index({ is_priority: 1 })
     .index({"website_name": 1, "fqdn": 1}, {unique: true})
 
 websiteSchema.statics.storeWebsite = async function(data){
