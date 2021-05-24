@@ -356,6 +356,10 @@ var websiteSchema = new Schema({
     is_priority: {
         type: Boolean,
         default: false
+    },
+    rss_urls: {
+        type: Array,
+        default: []
     }
 });
 websiteSchema
