@@ -1,4 +1,3 @@
-const { global_links } = require('../blueprints')
 const { globalLinkCtl } = require('../controllers')
 
 module.exports = async (name,  auth, router) => {

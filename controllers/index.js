@@ -11,5 +11,6 @@ module.exports = {
     'articleTestCtl': require('./articleTestCtl'),
     'globalLinkCtl': require('./globalLinkCtl'),
     'rawWebsiteCtl': require('./rawWebsiteCtl'),
-    'keywordLinkCtl': require('./keywordLinkCtl')
+    'keywordLinkCtl': require('./keywordLinkCtl'),
+    'sectionLogCtl': require('./sectionLogCtl')
 }

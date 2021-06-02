@@ -360,6 +360,10 @@ var websiteSchema = new Schema({
     rss_urls: {
         type: Array,
         default: []
+    },
+    history: {
+        type: Array,
+        default: []
     }
 });
 websiteSchema
@@ -383,6 +387,8 @@ websiteSchema
     .index({ verified: 1 })
     .index({ is_using_proxy: 1 })
     .index({ is_priority: 1 })
+    .index({ rss_urls: 1 })
+    .index({ history: 1 })
     .index({"website_name": 1, "fqdn": 1}, {unique: true})
 
 websiteSchema.statics.storeWebsite = async function(data){

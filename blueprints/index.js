@@ -7,5 +7,6 @@ module.exports = {
     'article_tests': require('./articleTestBp'),
     'global_links': require('./globalLinkBp'),
     'raw_websites': require('./rawWebsiteBp'),
-    'keyword_links': require('./keywordLink')
+    'keyword_links': require('./keywordLink'),
+    'section_logs': require('./sectionLogBp')
 }
