@@ -26,7 +26,7 @@ var schema = new Schema({
         trim: true,
         default: "System"
     },
-    date_added: {
+    date_created: {
         type: Date,
         default: Date.now
     },
