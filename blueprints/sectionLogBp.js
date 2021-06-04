@@ -38,6 +38,33 @@ var schema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'websites'
     },
+    captured_links: {
+        type: Array,
+        default:[]
+    },
+    fqdn: {
+        type:String,
+        default:null
+    },
+    dowload_latency: {
+        type:Number,
+        set: function(t){
+            return parseFloat(t).toFixed(2)
+        }
+    },
+    http_err: Number,
+    dns_err: Number,
+    timeout_err: Number,
+    base_err: Number,
+    skip_url: Number,
+    proxy: String,
+    user_agent: String,
+    handle_httpstatus_list: String,
+    redirect_url: String,
+    redirect_reason: String,
+    total_captured: Number,
+    total_links: Number,
+    total_duplicates: Number
 })
 
 schema
@@ -48,6 +75,18 @@ schema
     .index({updated_by: 1})
     .index({date_created: -1})
     .index({date_updated: -1})
+    .index({dowload_latency: 1})
+    .index({http_err: 1})
+    .index({dns_err: 1})
+    .index({timeout_err: 1})
+    .index({base_err: 1})
+    .index({skip_url: 1})
+    .index({proxy: 1})
+    .index({user_agent: 1})
+    .index({handle_httpstatus_list: 1})
+    .index({total_captured: 1})
+    .index({total_links: 1})
+    .index({total_duplicates: 1})
 
 mongoose.set('useFindAndModify', false)
 
