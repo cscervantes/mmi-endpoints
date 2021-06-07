@@ -64,7 +64,8 @@ var schema = new Schema({
     redirect_reason: String,
     total_captured: Number,
     total_links: Number,
-    total_duplicates: Number
+    total_duplicates: Number,
+    attempts: Number
 })
 
 schema
@@ -87,6 +88,7 @@ schema
     .index({total_captured: 1})
     .index({total_links: 1})
     .index({total_duplicates: 1})
+    .index({attempts: 1})
 
 mongoose.set('useFindAndModify', false)
 
