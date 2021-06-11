@@ -67,11 +67,7 @@ var schema = new Schema({
     total_duplicates: Number,
     attempts: Number,
     attempt_error_logs: Array,
-    machines_ip: Array,
-    website: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'websites'
-    }
+    machines_ip: Array
 })
 
 schema
