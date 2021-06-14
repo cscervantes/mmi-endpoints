@@ -57,8 +57,8 @@ var schema = new Schema({
     timeout_err: Number,
     base_err: Number,
     skip_url: Number,
-    proxy: String,
-    user_agent: String,
+    // proxy: String,
+    // user_agent: String,
     handle_httpstatus_list: String,
     redirect_url: String,
     redirect_reason: String,
@@ -66,7 +66,7 @@ var schema = new Schema({
     total_links: Number,
     total_duplicates: Number,
     attempts: Number,
-    attempt_error_logs: Array,
+    attempt_logs: Array,
     machines_ip: Array
 })
 
@@ -84,14 +84,14 @@ schema
     .index({timeout_err: 1})
     .index({base_err: 1})
     .index({skip_url: 1})
-    .index({proxy: 1})
-    .index({user_agent: 1})
+    // .index({proxy: 1})
+    // .index({user_agent: 1})
     .index({handle_httpstatus_list: 1})
     .index({total_captured: 1})
     .index({total_links: 1})
     .index({total_duplicates: 1})
     .index({attempts: 1})
-    .index({attempt_error_logs: 1})
+    .index({attempt_logs: 1})
     .index({machines_ip: 1})
 
 mongoose.set('useFindAndModify', false)
