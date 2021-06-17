@@ -9,5 +9,6 @@ module.exports = {
     'raw_websites': require('./rawWebsiteBp'),
     'keyword_links': require('./keywordLink'),
     'section_logs': require('./sectionLogBp'),
-    'section_links': require('./sectionLinkBp')
+    'section_links': require('./sectionLinkBp'),
+    'article_stages': require('./articleStage')
 }

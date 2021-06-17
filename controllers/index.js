@@ -13,5 +13,6 @@ module.exports = {
     'rawWebsiteCtl': require('./rawWebsiteCtl'),
     'keywordLinkCtl': require('./keywordLinkCtl'),
     'sectionLogCtl': require('./sectionLogCtl'),
-    'sectionLinkCtl': require('./sectionLinkCtl')
+    'sectionLinkCtl': require('./sectionLinkCtl'),
+    'articleStageCtl': require('./articleStageCtl')
 }

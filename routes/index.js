@@ -27,6 +27,7 @@ require('./rawWebsite')('/raw-website', guard, router)
 require('./keywordLink')('/keyword-link', guard, router)
 require('./sectionLog')('/section-log', guard, router)
 require('./sectionLink')('/section-link', guard, router)
+require('./articleStage')('/article-stage', guard, router)
 
 
 module.exports = router;
