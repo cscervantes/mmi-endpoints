@@ -10,5 +10,5 @@ module.exports = {
     'keyword_links': require('./keywordLink'),
     'section_logs': require('./sectionLogBp'),
     'section_links': require('./sectionLinkBp'),
-    'article_stages': require('./articleStage')
+    'article_stages': require('./articleStageBp')
 }
