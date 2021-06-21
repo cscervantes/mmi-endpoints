@@ -14,5 +14,6 @@ module.exports = {
     'keywordLinkCtl': require('./keywordLinkCtl'),
     'sectionLogCtl': require('./sectionLogCtl'),
     'sectionLinkCtl': require('./sectionLinkCtl'),
-    'articleStageCtl': require('./articleStageCtl')
+    'articleStageCtl': require('./articleStageCtl'),
+    'crawlerDashboard': require('./crawler')
 }
