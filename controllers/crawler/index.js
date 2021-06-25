@@ -24,19 +24,30 @@ crawler.FREQUENCY = async (req, res, next) => {
         //         { $group: { _id: "$article_status", total: { $sum: 1 } } }
         //      ]
         // )
-        let result = await articles.countDocuments({
+        let query = {
             date_created: {
                 "$gte": new Date(gte),
                 "$lte": new Date(lte)
             }
-        })
+        }
 
-        let result2 = await articles.countDocuments({
+        let query2 = {
             date_created: {
                 "$gte": new Date(gte2),
                 "$lte": new Date(lte2)
             }
-        })
+        }
+
+        if (req.query.website){
+            
+            query.website = mongoose.Types.ObjectId(req.query.website)
+
+            query2.website = mongoose.Types.ObjectId(req.query.website)
+
+        }
+        let result = await articles.countDocuments(query)
+
+        let result2 = await articles.countDocuments(query2)
 
         let data = {
             "total_link_for_this_week": result,
@@ -47,7 +58,7 @@ crawler.FREQUENCY = async (req, res, next) => {
 
         res.status(200).send(data)
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         next(createError(error))
     }
 }
@@ -62,6 +73,12 @@ crawler.ARTICLE_STATUS = async (req, res, next) => {
                 "$lte": new Date(lte)
             }
         }
+
+        if(req.query.website){
+            match.website = mongoose.Types.ObjectId(req.query.website)
+        }
+
+        // console.log(match)
        
         let result = await articles.aggregate(
             [
@@ -78,7 +95,7 @@ crawler.ARTICLE_STATUS = async (req, res, next) => {
         })
         res.status(200).send(result)
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         next(createError(error))
     }
 }
@@ -92,6 +109,10 @@ crawler.ARTICLE_CREATED_BY = async (req, res, next) => {
                 "$gte": new Date(gte),
                 "$lte": new Date(lte)
             }
+        }
+
+        if(req.query.website){
+            match.website = mongoose.Types.ObjectId(req.query.website)
         }
        
         let result = await articles.aggregate(
@@ -116,7 +137,7 @@ crawler.ARTICLE_CREATED_BY = async (req, res, next) => {
         })
         res.status(200).send(result)
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         next(createError(error))
     }
 }
