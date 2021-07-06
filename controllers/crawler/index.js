@@ -49,11 +49,14 @@ crawler.FREQUENCY = async (req, res, next) => {
 
         let result2 = await articles.countDocuments(query2)
 
+        let perc_comp = ( ( result - result2 ) / result2 ) * 100
+
         let data = {
             "total_link_for_this_week": result,
             "avg_links_per_day": result / 7,
             "total_link_for_last_week": result2,
-            "percentage_compare_previous_week": ((result2 / 7) / (result / 7)) * 100
+            // "percentage_compare_previous_week": ((result2 / 7) - (result / 7)) * 100
+            "percentage_compare_previous_week": perc_comp
         }
 
         res.status(200).send(data)
