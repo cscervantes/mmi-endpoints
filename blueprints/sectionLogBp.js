@@ -67,7 +67,8 @@ var schema = new Schema({
     total_duplicates: Number,
     attempts: Number,
     attempt_logs: Array,
-    machines_ip: Array
+    machines_ip: Array,
+    last_machine_ip: String
 })
 
 schema
@@ -93,6 +94,7 @@ schema
     .index({attempts: 1})
     .index({attempt_logs: 1})
     .index({machines_ip: 1})
+    .index({last_machine_ip: 1})
 
 mongoose.set('useFindAndModify', false)
 

@@ -9,6 +9,19 @@ var schema = new Schema({
         trim:true,
         required: true
     },
+    fqdn: {
+        type: String,
+        trim:true,
+        required: true
+    },
+    priority_number: {
+        type: Number,
+        default:0
+    },
+    is_dynamic: {
+        type: Boolean,
+        default: false
+    },
     date_created: {
         type: Date,
         default: Date.now
@@ -35,6 +48,9 @@ schema
     .index({date_created: -1})
     .index({date_updated: -1})
     .index({section_status: 1})
+    .index({fqdn: 1})
+    .index({priority_number: 1})
+    .index({is_dynamic: 1})
 
 schema.statics.storeSection = async function(data){
     try {
