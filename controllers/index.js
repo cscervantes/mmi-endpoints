@@ -15,5 +15,7 @@ module.exports = {
     'sectionLogCtl': require('./sectionLogCtl'),
     'sectionLinkCtl': require('./sectionLinkCtl'),
     'articleStageCtl': require('./articleStageCtl'),
-    'crawlerDashboard': require('./crawler')
+    'crawlerDashboard': require('./crawler'),
+    'potchInstanceCtl': require('./potchIntanceCtl'),
+    'markAnalyzerCtl': require('./markAnalyzerCtl')
 }

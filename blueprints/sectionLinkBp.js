@@ -11,6 +11,11 @@ var schema = new Schema({
         type: Number,
         default:0
     },
+    fqdn: {
+        type: String,
+        trim:true,
+        required: true
+    },
     date_created: {
         type: Date,
         default: Date.now
@@ -31,11 +36,12 @@ var schema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'websites'
     },
-    tempora_data: Array
+    temporal_data: Array
 })
 
 schema
 .index({section_url: 1})
+.index({fqdn: 1})
 .index({created_by: 1})
 .index({updated_by: 1})
 .index({date_created: -1})

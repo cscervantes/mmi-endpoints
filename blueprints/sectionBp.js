@@ -41,7 +41,7 @@ var schema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'websites'
     },
-    tempora_data: Array
+    temporal_data: Array
 })
 
 schema

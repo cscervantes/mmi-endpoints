@@ -29,6 +29,8 @@ require('./sectionLog')('/section-log', guard, router)
 require('./sectionLink')('/section-link', guard, router)
 require('./articleStage')('/article-stage', guard, router)
 require('./crawler')('/crawler-dashboard', guard, router)
+require('./potchInstance')('/potch-instance', guard, router)
+require('./markAnalyzer')('/mark-analyzer', guard, router)
 
 
 module.exports = router;
