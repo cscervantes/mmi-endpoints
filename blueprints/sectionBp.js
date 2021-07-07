@@ -40,7 +40,8 @@ var schema = new Schema({
     website: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'websites'
-    }
+    },
+    tempora_data: Array
 })
 
 schema
