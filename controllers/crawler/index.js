@@ -3,6 +3,7 @@ const moment = require('moment')
 const mongoose = require('mongoose')
 const { websites, articles } = require('../../blueprints');
 // const { emit } = require('../../blueprints/websiteBp');
+const _ = require('lodash')
 const crawler = {}
 
 const getMode = a => 
@@ -16,6 +17,10 @@ const getMode = a =>
       return count;
     }, {})
   ).reduce((a, v) => v[0] < a[0] ? a : v, [0, null])[1]
+
+const flatten=(obj)=>Object.values(obj).flat()
+
+const flatten_array=(arr)=>[].concat.apply([],arr);
 
 crawler.FREQUENCY = async (req, res, next) => {
     try {
@@ -316,20 +321,318 @@ crawler.PER_WEBSITE_METRICS = async (req, res, next) => {
                 "$lte": new Date(lte)
             }
         }
-        if (req.query.website){
-            match.website = mongoose.Types.ObjectId(req.query.website)
+        let match_website = { "websites.country_code": (req.query.country_code) ? req.query.country_code : "PHL", "websites.is_priority": true }
+        
+        if(req.query.is_priority){
+            match_website["websites.is_priority"] = false
         }
-
-        let articleCount = await articles.countDocuments(match)
-        let acceptable = 0
-        let unacceptable = 0
-
-        let data = {
-            articleCount, acceptable, unacceptable
-        }
-
+        let website = await articles.aggregate(
+            [
+                {"$match": match},
+                {"$lookup": {
+                    from: "websites",
+                    localField: "website",
+                    foreignField: "_id",
+                    as: "websites"
+                }},
+                {"$unwind": "$websites"},
+                {
+                    "$match":  match_website
+                },
+                {"$group": {
+                    _id: "$websites", total_articles: {"$sum":1}
+                }},
+                {
+                    "$project": {
+                        "_id._id":1,
+                        "_id.website_name":1,
+                        "_id.alexa_rankings":1,
+                        "_id.country_code":1,
+                        "_id.country":1,
+                        "total_articles":1
+                    }
+                },
+                {
+                    "$sort": { "total_articles": -1 }
+                },
+                {"$limit":2}
+            ]
+        )
+        // console.log(website)
+        let web = website
+        let data = web
         res.status(200).send(data)
     } catch (error) {
+        console.log(error)
+        next(createError(error))
+    }
+}
+
+crawler.CAPTURE_TREND = async (req, res, next) => {
+    try {
+        let startDate = (req.query.start_date) ? new Date(req.query.start_date) : new Date(moment().subtract(7, 'days').format())
+        let endDate = (req.query.end_date) ? new Date(req.query.end_date): new Date()
+        let dateDiff = endDate.getDate() - startDate.getDate()
+        console.log(startDate, endDate, dateDiff)
+        let data = []
+        for(let i = 1; i <= dateDiff; i++){
+            let gte = moment(endDate).subtract(i, 'days').utc().format('YYYY-MM-DDT16:00:00.000Z')
+            let lte = moment(new Date(gte)).add(1, 'days').utc().format('YYYY-MM-DDT16:00:00.000Z')
+            let match = {
+                article_status: "Done",
+                article_publish_date: {
+                    "$gte": new Date(gte),
+                    "$lte": new Date(lte)
+                }
+            }
+            let dateToday = moment(gte).format('MMM-D-YY')
+            let match_website = { "websites.country_code": (req.query.country_code) ? req.query.country_code : "PHL", "websites.is_priority": true }
+        
+            if(req.query.is_priority){
+                match_website["websites.is_priority"] = false
+            }
+
+            let result = await articles.aggregate([
+                {
+                    "$match": match
+                },
+                {"$lookup": {
+                    from: "websites",
+                    localField: "website",
+                    foreignField: "_id",
+                    as: "websites"
+                }},
+                {"$unwind": "$websites"},
+                {
+                    "$match":  match_website
+                },
+                {
+                    "$project": {
+                        date_published: "$article_publish_date",
+                        date_captured: "$date_created",
+                        hour: {
+                            "$abs": {
+                                "$divide": [
+                                    {
+                                        "$subtract":["$article_publish_date", "$date_created"]
+                                    }, 3600000
+                                ]
+                            }
+                        },
+                        _id:1
+                    }
+                }
+            ])
+
+            let original_count = result.length
+            let acceptable = result.filter(v=>v.hour <= 8)
+            let unacceptable = result.filter(v=>v.hour > 8)
+            console.log('Original Count', result.length, acceptable.length, unacceptable.length)
+            data.push({
+                "volume": original_count,
+                "acceptable_percentage": Math.abs(( acceptable.length / original_count ) * 100),
+                "unacceptable_percentage": Math.abs(( unacceptable.length / original_count ) * 100),
+                "date": dateToday
+            })
+        }
+        
+        res.status(200).send(data)
+    } catch (error) {
+        console.log(error)
+        next(createError(error))
+    }
+}
+
+crawler.ACCEPTABLE_ARTICLES_2 = async (req, res, next) => {
+    try {
+        let gte = moment().subtract(7, 'days').utc().format('YYYY-MM-DDT16:00:00.000Z')
+        let lte = moment().utc().format('YYYY-MM-DDT16:00:00.000Z')
+
+        let gte2 = moment().subtract(14, 'days').utc().format('YYYY-MM-DDT16:00:00.000Z')
+        let lte2 = moment().subtract(7, 'days').utc().format('YYYY-MM-DDT16:00:00.000Z')
+
+        let match = {
+            article_status: "Done",
+            article_publish_date: {
+                "$gte": new Date(gte),
+                "$lte": new Date(lte)
+            }
+        }
+
+        let match2 = {
+            article_status: "Done",
+            article_publish_date: {
+                "$gte": new Date(gte2),
+                "$lte": new Date(lte2)
+            }
+        }
+
+        let match_website = { "websites.country_code": (req.query.country_code) ? req.query.country_code : "PHL", "websites.is_priority": true }
+        
+        if(req.query.is_priority){
+            match_website["websites.is_priority"] = false
+        }
+
+        let result = await articles.aggregate([
+            {
+                "$match": match
+            },
+            {"$lookup": {
+                from: "websites",
+                localField: "website",
+                foreignField: "_id",
+                as: "websites"
+            }},
+            {"$unwind": "$websites"},
+            {
+                "$match":  match_website
+            },
+            {
+                "$project": {
+                    date_published: "$article_publish_date",
+                    date_captured: "$date_created",
+                    hour: {
+                        "$abs": {
+                            "$divide": [
+                                {
+                                    "$subtract":["$article_publish_date", "$date_created"]
+                                }, 3600000
+                            ]
+                        }
+                    },
+                    _id:1
+                }
+            }
+        ])
+        
+        let total_links = result.length
+        let acceptable = result.filter(v=>v.hour <= 8)
+        let unacceptable = result.filter(v=>v.hour > 8)
+
+        let result2 = await articles.aggregate([
+            {
+                "$match": match2
+            },
+            {"$lookup": {
+                from: "websites",
+                localField: "website",
+                foreignField: "_id",
+                as: "websites"
+            }},
+            {"$unwind": "$websites"},
+            {
+                "$match":  match_website
+            },
+            {
+                "$project": {
+                    date_published: "$article_publish_date",
+                    date_captured: "$date_created",
+                    hour: {
+                        "$abs": {
+                            "$divide": [
+                                {
+                                    "$subtract":["$article_publish_date", "$date_created"]
+                                }, 3600000
+                            ]
+                        }
+                    },
+                    _id:1
+                }
+            }
+        ])
+
+        let acceptable2 = result2.filter(v=>v.hour <= 8)
+
+        let unacceptable2 = result2.filter(v=>v.hour > 8)
+
+        let averageAcceptable = (acceptable.length/total_links) * 100
+
+        let averageUnacceptable = (unacceptable.length/total_links) * 100
+
+        let perc_comp = ( acceptable.length > acceptable2.length ) ? ( ( acceptable.length - acceptable2.length ) / acceptable2.length ) * 100 : ( ( acceptable2.length - acceptable.length ) / acceptable2.length ) * 100
+        
+        let perc_comp2 = ( unacceptable.length > unacceptable2.length ) ? ( ( unacceptable.length - unacceptable2.length ) / unacceptable2.length ) * 100 : ( ( unacceptable2.length - unacceptable.length ) / unacceptable2.length ) * 100
+        
+
+        let data = {
+            "total_links": total_links,
+            "acceptable": {
+                "t_links": acceptable.length, 
+                "percentage": averageAcceptable,
+                "mode_time_in_mins": getMode(acceptable.map(v=>v.hour)),
+                "compared_last_week": perc_comp
+            },
+            "unacceptable": {
+                "t_links": unacceptable.length, 
+                "percentage": averageUnacceptable,
+                "mode_time_in_mins": getMode(unacceptable.map(v=>v.hour)),
+                "compared_last_week": perc_comp2
+            }
+        }
+        res.status(200).send(data)
+    } catch (error) {
+        console.error(error)
+        next(createError(error))
+    }
+}
+
+crawler.ARTICLE_STATUS_TIMELINE = async (req, res, next) => {
+    try {
+        let startDate = (req.query.start_date) ? new Date(req.query.start_date) : new Date(moment().subtract(7, 'days').format())
+        let endDate = (req.query.end_date) ? new Date(req.query.end_date): new Date()
+        let dateDiff = endDate.getDate() - startDate.getDate()
+        // console.log(startDate, endDate, dateDiff)
+        let data = []
+        for(let i = 1; i <= dateDiff; i++){
+            let gte = moment(endDate).subtract(i, 'days').utc().format('YYYY-MM-DDT16:00:00.000Z')
+            let lte = moment(new Date(gte)).add(1, 'days').utc().format('YYYY-MM-DDT16:00:00.000Z')
+            let match = {
+                date_created: {
+                    "$gte": new Date(gte),
+                    "$lte": new Date(lte)
+                }
+            }
+            let dateToday = moment(gte).format('MMM-D-YY')
+            let match_website = { "websites.country_code": (req.query.country_code) ? req.query.country_code : "PHL", "websites.is_priority": true }
+        
+            if(req.query.is_priority){
+                match_website["websites.is_priority"] = false
+            }
+
+            let result = await articles.aggregate([
+                {
+                    "$match": match
+                },
+                {"$lookup": {
+                    from: "websites",
+                    localField: "website",
+                    foreignField: "_id",
+                    as: "websites"
+                }},
+                {"$unwind": "$websites"},
+                {
+                    "$match":  match_website
+                },
+                {
+                    "$group": {
+                        _id: "$article_status", count: {"$sum":1}
+                    }
+                }
+            ])
+            result = result.map(function(v){
+                obj = {}
+                obj[v._id] = v.count
+                // obj["percentage"] = ( v.count / result.reduce((a, b) => a + b.count, 0) ) * 100
+                return obj
+            })
+            obj = Object.assign(...result)
+            obj.date = dateToday
+            data.push(obj)
+        }
+        
+        res.status(200).send(data)
+    } catch (error) {
+        console.error(error)
         next(createError(error))
     }
 }
