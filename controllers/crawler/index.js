@@ -1,7 +1,7 @@
 const createError = require('http-errors');
 const moment = require('moment')
 const mongoose = require('mongoose')
-const { websites, articles } = require('../../blueprints');
+const { websites, articles, section_logs } = require('../../blueprints');
 // const { emit } = require('../../blueprints/websiteBp');
 const _ = require('lodash')
 const crawler = {}
@@ -355,11 +355,77 @@ crawler.PER_WEBSITE_METRICS = async (req, res, next) => {
                 {
                     "$sort": { "total_articles": -1 }
                 },
-                {"$limit":2}
+                {"$limit":(req.query.limit) ? parseInt(req.query.limit) : 10}
             ]
         )
-        // console.log(website)
-        let web = website
+        let web = []
+        for (let i = 0; i < website.length; i++){
+            match.website = website[i]._id._id
+            let r = await articles.aggregate([
+                {"$match":match},
+                {
+                    "$project": {
+                        date_published: "$article_publish_date",
+                        date_captured: "$date_created",
+                        hour: {
+                            "$abs": {
+                                "$divide": [
+                                    {
+                                        "$subtract":["$article_publish_date", "$date_created"]
+                                    }, 3600000
+                                ]
+                            }
+                        },
+                        _id:1
+                    }
+                }
+            ])
+            let errors = await articles.countDocuments({article_status: "Error",
+            date_created: {
+                "$gte": new Date(gte),
+                "$lte": new Date(lte)
+            }})
+            let average_attempts = await section_logs.aggregate([
+                {
+                    "$match": {
+                        website: website[i]._id._id,
+                        date_created: {
+                            "$gte": new Date(gte),
+                            "$lte": new Date(lte)
+                        }
+                    }
+                },{
+                    "$group": {
+                        _id: "$website", averageAttempts: {"$avg": {"$sum": ["$attempts", 24]}}
+                        // _id: "$website", averageAttempts: {$sum:"$attempts"}
+                    }
+                }
+            ])
+            let frequency_per_day = await articles.countDocuments(
+                {
+                    website: website[i]._id._id,
+                    article_status: "Done",
+                    article_publish_date: {
+                        "$gte": moment().subtract(7, 'days').utc().format('YYYY-MM-DDT16:00:00.000Z'),
+                        "$lte": new Date(lte)
+                    }
+                }
+            ) / 7
+            let averageAttempts = average_attempts.shift().averageAttempts
+            let accepted = r.filter(v=>v.hour <=8).length
+            let unaccepted = r.filter(v=>v.hour > 8).length
+            web.push({
+                _id: website[i]._id._id,
+                website: website[i]._id.website_name,
+                ...website[i]._id.alexa_rankings,
+                country: website[i]._id.country,
+                country_code: website[i]._id.country_code,
+                total_links: website[i].total_articles,
+                accepted,acceptable_percentage:(accepted / website[i].total_articles) * 100, 
+                unaccepted, unacceptable_percentage: (unaccepted / website[i].total_articles) * 100, 
+                errors, averageAttempts, frequency_per_day
+            })
+        }
         let data = web
         res.status(200).send(data)
     } catch (error) {
