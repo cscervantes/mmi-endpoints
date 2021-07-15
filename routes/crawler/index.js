@@ -10,4 +10,6 @@ module.exports = async (name, auth, router) => {
     router.get(name+'/per-website-metrics', auth, await crawlerDashboard.PER_WEBSITE_METRICS)
     router.get(name+'/capture-trend', auth, await crawlerDashboard.CAPTURE_TREND)
     router.get(name+'/article-status-timeline', auth, await crawlerDashboard.ARTICLE_STATUS_TIMELINE)
+    router.get(name+'/article-elapse-timeline', auth, await crawlerDashboard.ARTICLE_ELAPSE_TIMELINE)
+    router.get(name+'/publication-frequency', auth, await crawlerDashboard.PUBLICATION_FREQUENCY)
 }

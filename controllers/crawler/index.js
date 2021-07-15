@@ -18,10 +18,6 @@ const getMode = a =>
     }, {})
   ).reduce((a, v) => v[0] < a[0] ? a : v, [0, null])[1]
 
-const flatten=(obj)=>Object.values(obj).flat()
-
-const flatten_array=(arr)=>[].concat.apply([],arr);
-
 crawler.FREQUENCY = async (req, res, next) => {
     try {
         let gte = moment().subtract(7, 'days').utc().format('YYYY-MM-DDT16:00:00.000Z')
@@ -696,6 +692,163 @@ crawler.ARTICLE_STATUS_TIMELINE = async (req, res, next) => {
             data.push(obj)
         }
         
+        res.status(200).send(data)
+    } catch (error) {
+        console.error(error)
+        next(createError(error))
+    }
+}
+
+crawler.ARTICLE_ELAPSE_TIMELINE = async (req, res, next) => {
+    try {
+        let startDate = (req.query.start_date) ? new Date(req.query.start_date) : new Date(moment().subtract(7, 'days').format())
+        let endDate = (req.query.end_date) ? new Date(req.query.end_date): new Date()
+        let dateDiff = endDate.getDate() - startDate.getDate()
+        console.log(startDate, endDate, dateDiff)
+        let data = []
+        for(let i = 1; i <= dateDiff; i++){
+            let gte = moment(endDate).subtract(i, 'days').utc().format('YYYY-MM-DDT16:00:00.000Z')
+            let lte = moment(new Date(gte)).add(1, 'days').utc().format('YYYY-MM-DDT16:00:00.000Z')
+            let match = {
+                article_status: "Done",
+                article_publish_date: {
+                    "$gte": new Date(gte),
+                    "$lte": new Date(lte)
+                }
+            }
+            console.log(match)
+            let dateToday = moment(gte).format('MMM-D-YY')
+            let match_website = { "websites.country_code": (req.query.country_code) ? req.query.country_code : "PHL", "websites.is_priority": true }
+            
+            if(req.query.is_priority){
+                match_website["websites.is_priority"] = false
+            }
+            let result = await articles.aggregate([
+                {"$match":match},
+                {"$lookup": {
+                    from: "websites",
+                    localField: "website",
+                    foreignField: "_id",
+                    as: "websites"
+                }},
+                {"$unwind": "$websites"},
+                {
+                    "$match":  match_website
+                },
+                {
+                    "$project": {
+                        date_published: "$article_publish_date",
+                        date_captured: "$date_created",
+                        minutes: {
+                            "$abs": {
+                                "$divide": [
+                                    {
+                                        "$subtract":["$article_publish_date", "$date_created"]
+                                    }, 60000
+                                ]
+                            }
+                        },
+                        _id:1
+                    }
+                }
+            ])
+            let total_articles = result.length
+            let fifteen_mins = result.filter(v=>v.minutes <= 15).length
+            let thirty_mins = result.filter(v=>v.minutes <= 30 && v.minutes > 15).length
+            let fourtyfive_mins = result.filter(v=>v.minutes <= 45 && v.minutes > 30).length
+            let sixty_mins = result.filter(v=>v.minutes <= 60 && v.minutes > 45).length
+
+            let two_hours = result.filter(v=>v.minutes <= 120 && v.minutes > 60).length
+            let four_hours = result.filter(v=>v.minutes <= 240 && v.minutes > 120).length
+            let six_hours = result.filter(v=>v.minutes <= 360 && v.minutes > 240).length
+            let eight_hours = result.filter(v=>v.minutes <= 480 && v.minutes > 360).length
+            let ten_hours = result.filter(v=>v.minutes <= 600 && v.minutes > 480).length
+            let twelve_hours = result.filter(v=>v.minutes <= 720 && v.minutes > 600).length
+            let fourteen_hours = result.filter(v=>v.minutes <= 840 && v.minutes > 720).length
+            let sixteen_hours = result.filter(v=>v.minutes <= 960 && v.minutes > 840).length
+            let eighteen_hours = result.filter(v=>v.minutes <= 1080 && v.minutes > 960).length
+            let twenty_hours = result.filter(v=>v.minutes <= 1200 && v.minutes > 1080).length
+            let twentytwo_hours = result.filter(v=>v.minutes <= 1320 && v.minutes > 1200).length
+            let twentyfour_hours = result.filter(v=>v.minutes <= 1440 && v.minutes > 1320).length
+            let more_than_a_day = result.filter(v=>v.minutes > 1440).length
+
+            data.push({
+                total_articles,
+                acceptable: {fifteen_mins, thirty_mins, fourtyfive_mins, sixty_mins},
+                unacceptable: {two_hours, four_hours, six_hours, eight_hours, ten_hours,
+                twelve_hours, fourteen_hours, sixteen_hours, eighteen_hours, twenty_hours,
+                twentytwo_hours, twentyfour_hours, more_than_a_day
+                }, date: dateToday
+            })
+        }
+        res.status(200).send(data)
+    } catch (error) {
+        next(createError(error))
+    }
+}
+
+crawler.PUBLICATION_FREQUENCY = async (req, res, next) => {
+    try {
+        let startDate = (req.query.start_date) ? new Date(req.query.start_date) : new Date(moment().subtract(7, 'days').format())
+        let endDate = (req.query.end_date) ? new Date(req.query.end_date): new Date()
+        let dateDiff = endDate.getDate() - startDate.getDate()
+        console.log(startDate, endDate, dateDiff)
+        let data = []
+        for(let i = 1; i <= dateDiff; i++){
+            let gte = moment(endDate).subtract(i, 'days').utc().format('YYYY-MM-DDT16:00:00.000Z')
+            let lte = moment(new Date(gte)).add(1, 'days').utc().format('YYYY-MM-DDT16:00:00.000Z')
+            let match = {
+                article_status: "Done",
+                article_publish_date: {
+                    "$gte": new Date(gte),
+                    "$lte": new Date(lte)
+                }
+            }
+            // console.log(match)
+            let dateToday = moment(gte).format('MMM-D-YY')
+            let match_website = { "websites.country_code": (req.query.country_code) ? req.query.country_code : "PHL", "websites.is_priority": true }
+            
+            if(req.query.is_priority){
+                match_website["websites.is_priority"] = false
+            }
+            let result = await articles.aggregate([
+                {"$match":match},
+                {"$lookup": {
+                    from: "websites",
+                    localField: "website",
+                    foreignField: "_id",
+                    as: "websites"
+                }},
+                {"$unwind": "$websites"},
+                {
+                    "$match":  match_website
+                },
+                {
+                    "$project": {
+                        website: "$websites.website_name",
+                        date_published: "$article_publish_date",
+                        _id:1
+                    }
+                }
+            ])
+            console.log(result)
+            // let groupPublication = result.map(v=>{
+            //     twelve_am = 0
+            //     if (v.minutes == 0){
+            //         twelve_am+=1
+            //     }else if(v.minutes > 0 && v.minutes <= 60){
+
+            //     }
+            //     return {
+            //         website:v.website, twelve_am
+            //     }
+            // })
+            let total_articles = result.length
+            data.push({
+                total_articles
+                
+            })
+        }
         res.status(200).send(data)
     } catch (error) {
         console.error(error)
