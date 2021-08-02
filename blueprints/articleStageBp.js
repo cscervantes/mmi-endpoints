@@ -106,7 +106,8 @@ var schema = new Schema({
     section: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'sections'
-    }
+    },
+    raw_html: String
 })
 
 schema

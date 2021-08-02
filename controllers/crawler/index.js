@@ -434,7 +434,8 @@ crawler.CAPTURE_TREND = async (req, res, next) => {
     try {
         let startDate = (req.query.start_date) ? new Date(req.query.start_date) : new Date(moment().subtract(7, 'days').format())
         let endDate = (req.query.end_date) ? new Date(req.query.end_date): new Date()
-        let dateDiff = endDate.getDate() - startDate.getDate()
+        // let dateDiff = endDate.getDate() - startDate.getDate()
+        let dateDiff = moment(endDate).diff(moment(startDate), 'days')
         console.log(startDate, endDate, dateDiff)
         let data = []
         for(let i = 1; i <= dateDiff; i++){
@@ -642,7 +643,8 @@ crawler.ARTICLE_STATUS_TIMELINE = async (req, res, next) => {
     try {
         let startDate = (req.query.start_date) ? new Date(req.query.start_date) : new Date(moment().subtract(7, 'days').format())
         let endDate = (req.query.end_date) ? new Date(req.query.end_date): new Date()
-        let dateDiff = endDate.getDate() - startDate.getDate()
+        // let dateDiff = endDate.getDate() - startDate.getDate()
+        let dateDiff = moment(endDate).diff(moment(startDate), 'days')
         // console.log(startDate, endDate, dateDiff)
         let data = []
         for(let i = 1; i <= dateDiff; i++){
@@ -703,7 +705,8 @@ crawler.ARTICLE_ELAPSE_TIMELINE = async (req, res, next) => {
     try {
         let startDate = (req.query.start_date) ? new Date(req.query.start_date) : new Date(moment().subtract(7, 'days').format())
         let endDate = (req.query.end_date) ? new Date(req.query.end_date): new Date()
-        let dateDiff = endDate.getDate() - startDate.getDate()
+        // let dateDiff = endDate.getDate() - startDate.getDate()
+        let dateDiff = moment(endDate).diff(moment(startDate), 'days')
         console.log(startDate, endDate, dateDiff)
         let data = []
         for(let i = 1; i <= dateDiff; i++){
@@ -791,7 +794,8 @@ crawler.PUBLICATION_FREQUENCY = async (req, res, next) => {
     try {
         let startDate = (req.query.start_date) ? new Date(req.query.start_date) : new Date(moment().subtract(7, 'days').format())
         let endDate = (req.query.end_date) ? new Date(req.query.end_date): new Date()
-        let dateDiff = endDate.getDate() - startDate.getDate()
+        // let dateDiff = endDate.getDate() - startDate.getDate()
+        let dateDiff = moment(endDate).diff(moment(startDate), 'days')
         console.log(startDate, endDate, dateDiff)
         let data = []
         for(let i = 1; i <= dateDiff; i++){
