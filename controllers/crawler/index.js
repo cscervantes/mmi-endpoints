@@ -791,8 +791,9 @@ crawler.ARTICLE_ELAPSE_TIMELINE = async (req, res, next) => {
 }
 
 crawler.PUBLICATION_FREQUENCY = async (req, res, next) => {
+    // add a per 12 hours difference for the results
     try {
-        let startDate = (req.query.start_date) ? new Date(req.query.start_date) : new Date(moment().subtract(7, 'days').format())
+        let startDate = (req.query.start_date) ? new Date(req.query.start_date) : new Date(moment().subtract(2, 'days').format())
         let endDate = (req.query.end_date) ? new Date(req.query.end_date): new Date()
         // let dateDiff = endDate.getDate() - startDate.getDate()
         let dateDiff = moment(endDate).diff(moment(startDate), 'days')
@@ -833,6 +834,12 @@ crawler.PUBLICATION_FREQUENCY = async (req, res, next) => {
                         date_published: "$article_publish_date",
                         _id:1
                     }
+                },
+                {
+                    "$group": {
+                        "_id": "$website",
+                        "total": { $sum : 1}
+                    }
                 }
             ])
             console.log(result)
@@ -848,9 +855,117 @@ crawler.PUBLICATION_FREQUENCY = async (req, res, next) => {
             //     }
             // })
             let total_articles = result.length
+            data.push(result)
+        }
+        let newData = _.flatten(data)
+        let result = []
+        newData.reduce(function(res, value) {
+            if (!res[value._id]) {
+              res[value._id] = { _id: value._id, total: 0 };
+              result.push(res[value._id])
+            }
+            res[value._id].total += value.total;
+            return res;
+          }, {});
+
+        res.status(200).send(result)
+    } catch (error) {
+        console.error(error)
+        next(createError(error))
+    }
+}
+
+crawler.PUBLICATION_FREQUENCY_PER_HOURS = async (req, res, next) => {
+    try {
+        let startDate = (req.query.start_date) ? new Date(req.query.start_date) : new Date(moment().subtract(1, 'days').format())
+        let endDate = (req.query.end_date) ? new Date(req.query.end_date): new Date()
+        // let dateDiff = endDate.getDate() - startDate.getDate()
+        let dateDiff = moment(endDate).diff(moment(startDate), 'days')
+        console.log(startDate, endDate, dateDiff)
+
+        let match = {
+            article_status: "Done",
+            article_publish_date: {
+                "$gte": new Date(startDate),
+                "$lte": new Date(endDate)
+            }
+        }
+        // console.log(match)
+        let dateToday = moment(startDate).format('MMM-D-YY')
+        let match_website = { "websites.country_code": (req.query.country_code) ? req.query.country_code : "PHL", "websites.is_priority": true }
+        
+        if(req.query.is_priority){
+            match_website["websites.is_priority"] = false
+        }
+
+        let result = await articles.aggregate([
+            {"$match":match},
+            {"$lookup": {
+                from: "websites",
+                localField: "website",
+                foreignField: "_id",
+                as: "websites"
+            }},
+            {"$unwind": "$websites"},
+            {
+                "$match":  match_website
+            },
+            {
+                "$project": {
+                    website: "$websites.website_name",
+                    date_published: "$article_publish_date",
+                    // minutes: {
+                    //     "$abs": {
+                    //         "$divide": [
+                    //             {
+                    //                 "$subtract":["$article_publish_date", "$date_created"]
+                    //             }, 60000
+                    //         ]
+                    //     }
+                    // },
+                    hours: {"$hour": {
+                        "date": "$article_publish_date", 
+                        "timezone": "Asia/Manila"
+                    }},
+                    _id:0
+                }
+            },
+            // {
+            //     "$group": {
+            //         "_id": "$website",
+            //         "total": { $sum : 1}
+            //     }
+            // },
+            // {
+            //     "$sort": {website: -1}
+            // },
+            // {
+            //     "$limit": 1
+            // }
+        ])
+        let newData = groupArrayOfObjects(result, "website")
+        let data = []
+        for ( const k in newData) {
+            // console.log(k)
+            let _twelve_to_eight = 0
+            let _eight_to_four = 0
+            let _four_to_twelve = 0
+            for (let i = 0; i < newData[k].length; i++){
+                let h = newData[k][i].hours
+                if (h >=0 && h <=8){
+                    _twelve_to_eight += 1
+                }else if (h >=8 && h <=16){
+                    _eight_to_four += 1
+                }else if (h >=16 && h <=24){
+                    _four_to_twelve += 1
+                }
+            }
             data.push({
-                total_articles
-                
+                "publication": k,
+                "1st-12hours": _twelve_to_eight,
+                "2nd-12hours": _eight_to_four,
+                "3rd-12hours": _four_to_twelve,
+                "total_article": newData[k].length
             })
         }
         res.status(200).send(data)
@@ -860,3 +975,18 @@ crawler.PUBLICATION_FREQUENCY = async (req, res, next) => {
     }
 }
 module.exports = crawler
+
+function groupArrayOfObjects(list, key) {
+    return list.reduce(function(rv, x) {
+      (rv[x[key]] = rv[x[key]] || []).push(x);
+      return rv;
+    }, {});
+  };
+
+  function groupByKey(array, key) {
+    return array
+      .reduce((hash, obj) => {
+        if(obj[key] === undefined) return hash; 
+        return Object.assign(hash, { [obj[key]]:( hash[obj[key]] || [] ).concat(obj)})
+      }, {})
+ }
