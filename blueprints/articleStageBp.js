@@ -107,7 +107,11 @@ var schema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'sections'
     },
-    raw_html: String
+    raw_html: String,
+    is_merged: {
+        type: Boolean,
+        default: false
+    }
 })
 
 schema
@@ -120,6 +124,7 @@ schema
     .index({date_updated: -1})
     .index({article_status: 1})
     .index({article_source_from: 1})
+    .index({is_merged:1})
 
 
 schema.statics.storeArticle = async function(data){
