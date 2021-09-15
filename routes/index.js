@@ -31,6 +31,8 @@ require('./articleStage')('/article-stage', guard, router)
 require('./crawler')('/crawler-dashboard', guard, router)
 require('./potchInstance')('/potch-instance', guard, router)
 require('./markAnalyzer')('/mark-analyzer', guard, router)
+require('./linkClassifier')('/link-classifier', guard, router)
+require('./linkTagger')('/link-tagger', guard, router)
 
 
 module.exports = router;

@@ -12,5 +12,7 @@ module.exports = {
     'section_links': require('./sectionLinkBp'),
     'article_stages': require('./articleStageBp'),
     'potch_instances': require('./potchInstanceBp'),
-    'mark_analyzers': require('./markAnalyzerBp')
+    'mark_analyzers': require('./markAnalyzerBp'),
+    'link_classifiers': require('./linkClassifierBp'),
+    'link_taggers': require('./linkTaggerBp')
 }

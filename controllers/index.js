@@ -17,5 +17,7 @@ module.exports = {
     'articleStageCtl': require('./articleStageCtl'),
     'crawlerDashboard': require('./crawler'),
     'potchInstanceCtl': require('./potchIntanceCtl'),
-    'markAnalyzerCtl': require('./markAnalyzerCtl')
+    'markAnalyzerCtl': require('./markAnalyzerCtl'),
+    'linkClassifierCtl': require('./linkClassifierCtl'),
+    'linkTaggerCtl': require('./linkTaggerCtl')
 }
