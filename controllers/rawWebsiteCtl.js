@@ -182,4 +182,34 @@ raw.DATATABLES = async (req, res, next) => {
     }
 }
 
+raw.CUSTOM_QUERY = async(req, res, next) => {
+    try {
+        let limit = req.query.limit || 10
+        let offset = req.query.offset || 0
+        let fields = {}
+        if(req.query.fields){
+            fields = JSON.parse(req.query.fields)
+        }
+        let filter = req.body || {}
+        let sort = req.query.sort || 'date_created'
+        let sortBy = req.query.sortBy || -1
+        let sorting = {}
+        sorting[sort] = parseInt(sortBy)
+        const result = await raw_websites.find(filter, fields).limit(parseInt(limit)).skip(parseInt(offset)).sort(sorting)
+        res.status(200).send({'data': result})
+    } catch (error) {
+        console.log(error)
+        next(createError(error))
+    }
+}
+
+raw.COUNT_CUSTOM_QUERY = async (req, res, next) => {
+    try {
+        const result = await raw_websites.countDocuments(req.body)
+        res.status(200).send({'data': result})
+    } catch (error) {
+        next(createError(error))
+    }
+}
+
 module.exports = raw

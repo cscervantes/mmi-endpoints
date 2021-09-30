@@ -10,6 +10,10 @@ module.exports = async (name, auth, router) => {
 
     router.post(name+'/query', auth, await rawWebsiteCtl.QUERY)
 
+    router.post(name+'/count_custom_query', auth, await rawWebsiteCtl.COUNT_CUSTOM_QUERY)
+    
+    router.post(name+'/custom_query', auth, await rawWebsiteCtl.CUSTOM_QUERY)
+
     // CRUD
 
     router.get(name, auth, await rawWebsiteCtl.READ)
