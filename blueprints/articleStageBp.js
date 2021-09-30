@@ -111,7 +111,13 @@ var schema = new Schema({
     is_merged: {
         type: Boolean,
         default: false
-    }
+    },
+    is_published_date_correct: {
+        type: Boolean,
+        default: false
+    },
+    parser_total_attempts: Number,
+    brigade_total_attempts: Number
 })
 
 schema
@@ -125,6 +131,9 @@ schema
     .index({article_status: 1})
     .index({article_source_from: 1})
     .index({is_merged:1})
+    .index({is_published_date_correct: 1})
+    .index({parser_total_attempts: 1})
+    .index({brigade_total_attempts: 1})
 
 
 schema.statics.storeArticle = async function(data){

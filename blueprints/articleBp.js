@@ -107,7 +107,14 @@ var schema = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'sections'
     },
-    raw_html: String
+    raw_html: String,
+    is_published_date_correct: {
+        type: Boolean,
+        default: false
+    },
+    parser_total_attempts: Number,
+    brigade_total_attempts: Number
+
 })
 
 schema
@@ -120,6 +127,9 @@ schema
     .index({date_updated: -1})
     .index({article_status: 1})
     .index({article_source_from: 1})
+    .index({is_published_date_correct: 1})
+    .index({parser_total_attempts: 1})
+    .index({brigade_total_attempts: 1})
 
 
 schema.statics.storeArticle = async function(data){
