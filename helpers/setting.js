@@ -3,13 +3,17 @@ module.exports = {
         host: "192.168.3.40",
         user: "mmdbadmin",
         password: "@9%N5V*v?4)6ufy30qtUx_=>7JG1aOznE-Y!CoA^wBp&TD",
-        database: "ts_mediameter"
+        database: "ts_mediameter",
+        //adding timeouts
+        connectTimeout: 59000
     },
     mysql2: {
         host: "127.0.0.1",
         user: "root",
         password: "m3d1@m3terDb",
-        database: "mmi_scraper_2020"
+        database: "mmi_scraper_2020",
+        //adding timeouts
+        connectTimeout: 59000
     },
     mongodb : {
         production: {
@@ -32,11 +36,13 @@ module.exports = {
             autoIndex: false, // Don't build indexes
             // reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
             // reconnectInterval: 500, // Reconnect every 500ms
-            poolSize: 10, // Maintain up to 10 socket connections
+            poolSize: 10000, // Maintain up to 10 socket connections
             // If not connected, return errors immediately rather than waiting for reconnect
             bufferMaxEntries: 0,
-            connectTimeoutMS: 10000, // Give up initial connection after 10 seconds
-            socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+            // connectTimeoutMS: 10000, // Give up initial connection after 10 seconds
+            connectTimeoutMS: 59000, // Give up initial connection after 10 seconds
+            // socketTimeoutMS: 45000, // Close sockets after 45 seconds of inactivity
+            socketTimeoutMS: 59000, // Close sockets after 45 seconds of inactivity
             family: 4 // Use IPv4, skip trying IPv6
         }
     }
