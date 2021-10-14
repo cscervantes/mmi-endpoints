@@ -56,7 +56,9 @@ var schema = new Schema({
         type: String,
         trim:true
     },
-    page_source: String, 
+    page_source: String,
+    logic_block_number:Number,
+    url_classification:String,
     date_created: {
         type: Date,
         default: Date.now
@@ -85,6 +87,7 @@ schema
 .index({page_type: 1})
 .index({correct: 1})
 .index({nationality: 1})
+.index({url_classification: 1})
 .index({date_created: -1})
 .index({date_updated: -1})
 .index({created_by: 1})
