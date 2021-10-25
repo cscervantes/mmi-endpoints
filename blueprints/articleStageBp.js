@@ -116,6 +116,10 @@ var schema = new Schema({
         type: Boolean,
         default: false
     },
+    date_synced: {
+        type: Date,
+        default: Date.now
+    },
     parser_total_attempts: Number,
     brigade_total_attempts: Number
 })
@@ -134,6 +138,7 @@ schema
     .index({is_published_date_correct: 1})
     .index({parser_total_attempts: 1})
     .index({brigade_total_attempts: 1})
+    .index({date_synced: 1})
 
 
 schema.statics.storeArticle = async function(data){
