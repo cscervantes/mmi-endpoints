@@ -36,7 +36,7 @@ module.exports = {
             autoIndex: false, // Don't build indexes
             // reconnectTries: Number.MAX_VALUE, // Never stop trying to reconnect
             // reconnectInterval: 500, // Reconnect every 500ms
-            poolSize: 10000, // Maintain up to 10 socket connections
+            poolSize: 100000, // Maintain up to 10 socket connections
             // If not connected, return errors immediately rather than waiting for reconnect
             bufferMaxEntries: 0,
             // connectTimeoutMS: 10000, // Give up initial connection after 10 seconds
