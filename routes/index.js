@@ -33,6 +33,7 @@ require('./potchInstance')('/potch-instance', guard, router)
 require('./markAnalyzer')('/mark-analyzer', guard, router)
 require('./linkClassifier')('/link-classifier', guard, router)
 require('./linkTagger')('/link-tagger', guard, router)
+require('./mapper')('/mapper', guard, router)
 
 
 module.exports = router;

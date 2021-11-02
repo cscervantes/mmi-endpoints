@@ -19,5 +19,6 @@ module.exports = {
     'potchInstanceCtl': require('./potchIntanceCtl'),
     'markAnalyzerCtl': require('./markAnalyzerCtl'),
     'linkClassifierCtl': require('./linkClassifierCtl'),
-    'linkTaggerCtl': require('./linkTaggerCtl')
+    'linkTaggerCtl': require('./linkTaggerCtl'),
+    'mapperCtl': require('./mapperCtl'),
 }
