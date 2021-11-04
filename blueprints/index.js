@@ -15,5 +15,6 @@ module.exports = {
     'mark_analyzers': require('./markAnalyzerBp'),
     'link_classifiers': require('./linkClassifierBp'),
     'link_taggers': require('./linkTaggerBp'),
-    'mappers': require('./mapperBp')
+    'mappers': require('./mapperBp'),
+    'raw_urls': require('./rawUrlBp')
 }

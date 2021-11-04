@@ -34,6 +34,7 @@ require('./markAnalyzer')('/mark-analyzer', guard, router)
 require('./linkClassifier')('/link-classifier', guard, router)
 require('./linkTagger')('/link-tagger', guard, router)
 require('./mapper')('/mapper', guard, router)
+require('./rawUrl')('/raw-url', guard, router)
 
 
 module.exports = router;

@@ -47,6 +47,8 @@ var schema = new Schema({
 
     website_error_status:String,
 
+    website_icon_url: String,
+
     date_created: {
         type: Date,
         default: Date.now

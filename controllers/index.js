@@ -21,4 +21,5 @@ module.exports = {
     'linkClassifierCtl': require('./linkClassifierCtl'),
     'linkTaggerCtl': require('./linkTaggerCtl'),
     'mapperCtl': require('./mapperCtl'),
+    'rawUrlCtl': require('./rawUrlCtl')
 }
