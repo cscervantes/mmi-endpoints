@@ -48,6 +48,15 @@ var schema = new Schema({
     website_error_status:String,
 
     website_icon_url: String,
+    
+    website_category: String,
+
+    website_type: String,
+
+    website_cost: {
+        type: Number,
+        default: 300
+    },
 
     date_created: {
         type: Date,
@@ -82,6 +91,9 @@ schema
 .index({crawler_attempts: 1})
 .index({website_language: 1})
 .index({website_status: 1})
+.index({website_category: 1})
+.index({website_type: 1})
+.index({website_cost: 1})
 .index({website_error_status: 1})
 .index({date_created: -1})
 .index({date_updated: -1})
