@@ -35,6 +35,7 @@ require('./linkClassifier')('/link-classifier', guard, router)
 require('./linkTagger')('/link-tagger', guard, router)
 require('./mapper')('/mapper', guard, router)
 require('./rawUrl')('/raw-url', guard, router)
+require('./redisArticle')('/redis-article', guard, router)
 
 
 module.exports = router;

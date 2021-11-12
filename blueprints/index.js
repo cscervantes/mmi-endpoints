@@ -16,5 +16,6 @@ module.exports = {
     'link_classifiers': require('./linkClassifierBp'),
     'link_taggers': require('./linkTaggerBp'),
     'mappers': require('./mapperBp'),
-    'raw_urls': require('./rawUrlBp')
+    'raw_urls': require('./rawUrlBp'),
+    'redis_articles': require('./redisArticleBp')
 }
