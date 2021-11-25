@@ -28,6 +28,8 @@ var schema = new Schema({
 
     url_error_status: String,
 
+    attempts: Number,
+
     date_created: {
         type: Date,
         default: Date.now
@@ -52,6 +54,7 @@ schema
 .index({url_status: 1})
 .index({random_forest_classification: 1})
 .index({url_error_status: 1})
+.index({attempts: 1})
 .index({date_created: -1})
 .index({date_updated: -1})
 .index({created_by: 1})
